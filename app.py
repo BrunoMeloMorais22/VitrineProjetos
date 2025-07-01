@@ -167,8 +167,3 @@ def apagar_todos_projetos():
     db.session.commit()
     print(f"{qtd} projetos apagados do banco!")
 
-if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-        apagar_todos_projetos()
-    app.run(debug=True, port=8000)
