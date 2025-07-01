@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/login.css">
+
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="left">
+      <h1>Faça Login</h1>
+      <p>Por favor, preencha todos os campos para desfrutar de nossas ferramentas</p>
+    </div>
+    <div class="right">
+      <h2>Login</h2>
+      <form onsubmit="fazerLogin(event)">
+        <div class="form-group">
+          <input type="text" id="emailLogin" name="emailLogin" placeholder="Seu Email" required>
+        </div>
+        <div class="form-group">
+          <input type="password" id="senhaLogin" name="senhaLogin" placeholder="Sua Senha" required>
+        </div>
+
+        <span id="resultadoLogin"></span>
+        <button type="submit" class="submit-btn">Fazer Login</button>
+        <div class="social">
+          <i class="fab fa-facebook-f"></i>
+          <i class="fab fa-instagram"></i>
+          <i class="fab fa-pinterest-p"></i>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/static/js/login.js"></script>
+</body>
+</html>

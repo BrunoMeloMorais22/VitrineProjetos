@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro de Projetos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/projetos.css">
+
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="left">
+      <h1>Vamos cadastrar seu projeto?</h1>
+      <p>Preencha todos os campos corretamente e clique em "cadastrar Projeto"</p> <br>
+      <p>Selecione as linguagens usadas no seu projeto</p> <br>
+      <p>Adicione o link do seu portfólio para outras pessoas acessarem</p>
+      <img src="/static/image/projetoCadastro.jpg" alt="">
+    </div>
+    <div class="right">
+      <h2>Cadastro de Projeto</h2>
+      <form id="form-projeto" onsubmit="cadastrarProjeto(event)" enctype="multipart/form-data">
+        <div class="form-group">
+          <input type="text" id="nomePessoaProjeto" name="nomePessoaProjeto" placeholder="Digite seu nome por favor">
+        </div>
+        <div class="form-group">
+          <input type="text" id="nomeProjeto" name="nomeProjeto" placeholder="Digite o nome do projeto">
+        </div>
+        <div class="form-group">
+          <input type="text" id="descricaoProjeto" name="descricaoProjeto" placeholder="Digite a descrição do projeto">
+        </div>
+
+        <div class="form-group">
+            <input type="url" id="link" name="link" placeholder="Coloque aqui o link do seu portfolio">
+        </div>
+
+        <div class="form-group">
+          <input type="file" id="imagem" name="imagem" accept="image/*">
+        </div>
+
+        <h3>Linguagens Fronend</h3> <br>
+        <div class="linguagens">
+
+            <button type="button" class="chip" data-lang="JavaScript"><i class="fa-brands fa-js"></i> JavaScript</button>
+
+            <button type="button" class="chip" data-lang="angulaar"><i class="fa-brands fa-angular"></i> Angular</button>
+
+            <button type="button" class="chip" data-lang="react"><i class="fa-brands fa-react"></i> React</button>
+
+            <button type="button" class="chip" data-lang="TypeScript">
+                <i class="fa-solid fa-code"></i> TypeScript
+            </button>
+        </div>
+
+        <h3>Linguagens de marcação e estilo</h3> <br>
+        <div class="linguagens">
+            <button type="button" class="chip" data-lang="HTML"><i class="fa-brands fa-html5"></i> HTML5</button>
+
+            <button type="button" class="chip" data-lang="CSS"><i class="fa-brands fa-css3"></i> CSS3</button>
+
+            <button type="button" class="chip" data-lang="Stylus">
+                <i class="fa-solid fa-brush"></i> Stylus
+            </button>
+
+            <button type="button" class="chip" data-lang="LESS">
+                <i class="fa-solid fa-brush"></i> LESS
+            </button>
+
+            <button type="button" class="chip" data-lang="sass"><i class="fa-brands fa-leaf"></i> Sass</button>
+        </div>
+
+        <h3>Linguagens Backend</h3><br>
+        <div class="linguagens">
+            <button type="button"  class="chip" data-lang="Node.js"><i class="fa-brands fa-node"></i> Node.js</button>
+
+            <button type="button" class="chip" data-lang="Python"><i class="fa-brands fa-python"></i> Python</button>
+
+            <button type="button" class="chip" data-lang="PHP"><i class="fa-brands fa-php"></i> PHP</button>
+
+            <button type="button" class="chip" data-lang="Java"><i class="fa-brands fa-java"></i> Java</button>
+        </div>
+
+        <h3>Banco de Dados</h3><br>
+            <div class="linguagens">
+
+            <button type="button" class="chip" data-lang="MySQL"><i class="fa-solid fa-database"></i> MySQL</button>
+            <button type="button" class="chip" data-lang="MongoDB">MongoDB</button>
+
+            <button type="button" class="chip" data-lang="Firebase">
+                <i class="fa-solid fa-fire"></i> Firebase
+            </button> 
+
+            <button type="button" class="chip" data-lang="PostgreSQL">
+                <i class="fa-solid fa-database"></i> PostgreSQL
+            </button>
+        </div>
+
+        <span id="resultadoProjeto"></span>
+        <button type="submit" class="submit-btn">Cadastrar Projeto</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/static/js/projetos.js"></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+* {
+   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  height: 100vh;
+  background: linear-gradient(135deg, #2e003e, #1d0029);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.container {
+  display: flex;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0,0,0,0.5);
+  width: 900px;
+  max-width: 95%;
+}
+
+.left {
+  flex: 1;
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.left h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.left p {
+  font-size: 16px;
+  line-height: 1.6;
+  opacity: 0.8;
+}
+
+.left .btn {
+    margin-top: 30px;
+    background-color: #ff0077;
+    padding: 12px 24px;
+    border-radius: 25px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+      width: fit-content;
+    }
+
+.right {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.07);
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+
+.right h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.submit-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    background: linear-gradient(to right, #ff5f6d, #ffc371);
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.social {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.social i {
+    margin: 0 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+@media(max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    .left, .right {
+        padding: 40px 20px;
+    }
+}

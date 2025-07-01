@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/cadastro.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="left">
+      <h1>Bem-vindo!</h1>
+      <p>Por favor, preencha todos os campos para desfrutar de nossas ferramentas</p>
+    </div>
+    <div class="right">
+      <h2>Cadastro</h2>
+      <form onsubmit="fazerCadastro(event)">
+        <div class="form-group">
+          <input type="text" id="nomeCadastro" name="nomeCadastro" placeholder="Seu Nome" required>
+        </div>
+        <div class="form-group">
+          <input type="text" id="emailCadastro" name="emailCadastro" placeholder="Seu Email" required>
+        </div>
+        <div class="form-group">
+          <input type="password" id="senhaCadastro" name="senhaCadastro" placeholder="Sua Senha" required>
+        </div>
+        <div class="form-group">
+          <input type="text" id="confirmarSenha" name="confirmarSenha" placeholder="Confirme a Senha" required>
+        </div>
+
+        <span id="resultadoCadastro"></span> <br>
+        <button type="submit" id="btn-enviar" class="submit-btn">Fazer Cadastro</button>
+        <div class="social">
+          <a href="" class="social"><i class="fab fa-github"></i></a>
+          <a href="" class="social"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script src="/static/js/cadastro.js"></script>
+</body>
+</html>

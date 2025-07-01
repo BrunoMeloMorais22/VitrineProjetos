@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <h1>Vitrine Virtual</h1>
+        <nav>
+            {% if 'usuario' in session %}
+              <a href="{{ url_for('logout') }}">Sair</a>
+            {% else %}
+              <a href="{{ url_for('login') }}">Entrar</a>
+              <a href="{{ url_for('cadastro') }}">Cadastrar-se</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <section id="hero">
+        <h1>Crie seu portfolio online. Gratuito e Profissional</h1>
+        <p>Publique seus projetos visuais, mostre suas habilidades e descubra o trabalho de outros criadores</p>
+        <a href="/cadastrar_projeto">Publicar meus projetos</a></button>
+    </section>
+
+    <section class="como-funciona">
+        <h3>Como funciona</h3>
+        <div class="passos">
+            <div>
+                <h4>1️⃣ Cadastrar-se gratuitamente </h4>
+                <p>Crie uma conta com seu nome, email e senha</p>
+            </div>
+
+            <div>
+                <h4>2️⃣ Envie seus projetos </h4>
+                <p>Adicione imagens, titulos e descrições dos seus trabalhos</p>
+            </div>
+
+            <div>
+                <h4>3️⃣ Compartilhe com o mundo</h4>
+                <p>Outras pessoas poderão curtir, comentar e seguir seu perfil.</p>
+            </div>
+        </div>
+    </section> 
+
+    <section class="exemplo">
+    <h3>Bruno Melo</h3>
+    <div class="galeria">
+      <div class="card">
+        <img src="/static/image/networking.png" alt="Projeto 1">
+        <div class="conteudo">
+          <h4>Site Networking</h4>
+          <p>Site feito com HTMl, CSS, JavaScript, Flask, com conexão com backend. Conecte-se com novas pessoas, compartilher experiências e participe de eventos</p>
+          <p><strong>Linguagens:</strong>JavaScript, Python(flask), Mysql</p> <br>
+          <a href="https://networking-pi.vercel.app">Ver projeto</a>
+        </div>
+      </div>
+      <div class="card">
+        <img src="/static/image/todolist.png" alt="Projeto 2">
+        <div class="conteudo">
+          <h4>Site de lista de tarefas</h4>
+          <p>Site de lista de tarefas, coloque o que precisa fazer hoje, exclua quando terminar</p>
+          <p><strong>Linguagens:</strong>Html, Css, JavaScript</p> <br>
+          <a href="https://brunomelomorais22.github.io/To-Do-List/">Ver projeto</a>
+        </div>
+      </div>
+      
+      <div class="card">
+        <img src="/static/image/networking.png" alt="">
+        <div class="conteudo">
+            <h4>Portfolio</h4>
+            <p>Este é o meu portfólio pessoal, desenvolvido com foco em apresentar meus projetos, habilidades e experiências na área de desenvolvimento web. Criado com HTML, CSS, JavaScript e Flask, o site conta com design responsivo, seção de contato, e integração com backend. Aqui você pode conhecer meus principais trabalhos, minhas tecnologias favoritas e entrar em contato comigo de forma rápida e prática.</p>
+            <p><strong>Linguagens:</strong>JavaScript, Python(flask), Mysql</p> <br>
+            <a href="https://portfolio-gamma-pearl-18.vercel.app">Ver projeto</a>
+          </div>
+      </div>
+      
+      <br><br><br>
+  {% for projeto in projetos %}
+<div class="usuario-container">
+  <h3>{{ projeto.nomePessoaProjeto }}</h3>
+    <div class="card">
+      <img src="{{ url_for('static', filename='uploads/' + projeto.imagem) }}" alt="{{ projeto.nomeProjeto }}">
+      <div class="conteudo">
+        <h4>{{ projeto.nomeProjeto }}</h4>
+        <p>{{ projeto.descricaoProjeto }}</p>
+        <p><strong>Linguagens:</strong> {{ projeto.linguagens }}</p>
+        <a href="{{ projeto.link }}" target="_blank" class="botao">Ver Projeto</a>
+      </div>
+    </div>
+</div>
+{% endfor %}
+  </section>
+</body>
+</html>
