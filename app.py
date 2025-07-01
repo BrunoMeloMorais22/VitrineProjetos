@@ -68,35 +68,41 @@ def cadastro():
         print("Erro no backend", e)
         return jsonify({"mensagem": "Erro no servidor"})
 
-@app.route("/enviar_email", methods=["GET", "POST"])
+@app.route("/enviar_email", methods=["POST"])
 def enviar_email():
-    data = request.get_json()
-    emailCadastro = data.get("emailCadastro")
-    msg = EmailMessage()
-    msg['Subject'] = "Cadastrado com sucesso"
-    msg['From'] = "grumelo098@gmail.com"
-    msg['To'] = emailCadastro
-    msg.add_alternative(f"""
-    <!DOCTYPE html>
-<html>
-  <body>
-    <h2>📩 Obrigado por se cadastrar em nosso site!</h2>
-    <p>✅ Seu processo de cadastro está finalizado.</p>
-    <p>Agora você poderá desfrutar de nossas ferramentas e adicionar seus projetos em nossa plataforma.</p>
-    <hr>
-    <p>💬 Não responda este email. Em caso de dúvidas, entre em contato.</p>
-  </body>
-</html>
-""", subtype='html')
-    
     try:
+        data = request.get_json()
+
+        if not data or "emailCadastro" not in data:
+            return jsonify({"mensagem": "Email não recebido"}), 400
+
+        emailCadastro = data["emailCadastro"]
+        msg = EmailMessage()
+        msg['Subject'] = "Cadastrado com sucesso"
+        msg['From'] = "grumelo098@gmail.com"
+        msg['To'] = emailCadastro
+        msg.add_alternative(f"""
+        <!DOCTYPE html>
+        <html>
+          <body>
+            <h2>📩 Obrigado por se cadastrar em nosso site!</h2>
+            <p>✅ Seu processo de cadastro está finalizado.</p>
+            <p>Agora você poderá desfrutar de nossas ferramentas e adicionar seus projetos em nossa plataforma.</p>
+            <hr>
+            <p>💬 Não responda este email. Em caso de dúvidas, entre em contato.</p>
+          </body>
+        </html>
+        """, subtype='html')
+        
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
             smtp.login("grumelo098@gmail.com", "ourf sgnz wkiw sxse")
             smtp.send_message(msg)
-        
+
+        return jsonify({"mensagem": "Email enviado com sucesso"})
+
     except Exception as e:
         print("Erro ao enviar email", e)
-        return jsonify({"Erro no servidor"})
+        return jsonify({"mensagem": "Erro no servidor"}), 500
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
