@@ -161,9 +161,3 @@ def cadastrar_projeto():
     except Exception as e:
         db.session.rollback()
         return jsonify({"mensagem": f"Erro ao cadastrar projeto: {e}"}), 500
-
-def apagar_todos_projetos():
-    qtd = projetos.query.delete(synchronize_session=False)
-    db.session.commit()
-    print(f"{qtd} projetos apagados do banco!")
-
