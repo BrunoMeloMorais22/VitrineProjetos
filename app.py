@@ -19,7 +19,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.permanent_session_lifetime = timedelta(minutes=30)
 
 db.init_app(app)
-CORS(app)
+CORS(app, supports_credentials=True)
 from models import usuarios
 from models import projetos
 
@@ -116,6 +116,8 @@ def login():
 
         if user and check_password_hash(user.senhaCadastro, senhaLogin):
             session['usuario'] = user.emailCadastro
+            session['nomeCadastro'] = user.nomeCadastro
+            session['emailCadastro'] = user.emailCadastro
             return jsonify({"mensagem": "Login efetuado com sucesso"})
         else:
             return jsonify({"mensagem": "Email ou senha incorretos"}), 401
@@ -167,3 +169,54 @@ def cadastrar_projeto():
     except Exception as e:
         db.session.rollback()
         return jsonify({"mensagem": f"Erro ao cadastrar projeto: {e}"}), 500
+
+
+@app.route("/perfil")
+def perfil():
+    nomeCadastro = session.get("nomeCadastro")
+    emailCadastro = session.get("emailCadastro")
+    return render_template("perfil.html", nomeCadastro=nomeCadastro, emailCadastro=emailCadastro)
+
+
+@app.route("/configuracoes", methods=["GET", "POST"])
+def configuracoes():
+    nomeCadastro = session.get("nomeCadastro")
+    emailCadastro = session.get("emailCadastro")
+    return render_template("configuracoes.html", nomeCadastro=nomeCadastro, emailCadastro=emailCadastro)
+
+@app.route("/seguranca", methods=["GET", "POST"])
+def seguranca():
+    if "usuario" not in session:
+        return jsonify({"mensagem": "Usuário não encontrado"}), 401
+    
+    data = request.get_json()
+    if not data:
+        return jsonify({"Erro ao receber dados"}), 400
+    
+    senhaAtual = data.get("senhaAtual")
+    novaSenha = data.get("novaSenha")
+    confirmarSenha = data.get("confirmarSenha")
+
+    if not senhaAtual or not novaSenha or not confirmarSenha:
+        return jsonify({"mensagem": "Por favor, preencha todos os campos"})
+    
+    if novaSenha != confirmarSenha:
+        return jsonify({"mensagem": "As senhas não combinam"})
+    
+    email_usuario = session.get("usuario")
+    user = usuarios.query.filter_by(emailCadastro=email_usuario).first()
+
+    if not user:
+        return jsonify({"mensagem": "Usuário não existe"})
+    
+    if not check_password_hash(user.senhaCadastro, senhaAtual):
+        return jsonify({"mensagem": "Senha Atual incorreta"})
+        
+
+    user.senhaCadastro = generate_password_hash(novaSenha)
+    db.session.commit()
+
+    return jsonify({"mensagem": "Senha atualizada com sucesso"})
+
+
+        

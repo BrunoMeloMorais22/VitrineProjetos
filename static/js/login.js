@@ -10,7 +10,8 @@ function fazerLogin(event){
     fetch("/login", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ emailLogin, senhaLogin })
+        body: JSON.stringify({ emailLogin, senhaLogin }),
+        credentials: "include"
     })
     .then(res => res.json())
     .then(data => {

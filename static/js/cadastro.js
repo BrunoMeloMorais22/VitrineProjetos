@@ -27,11 +27,10 @@ function fazerCadastro(event) {
             .then(res => res.json())
             .then(data => {
                 console.log("Email enviado:", data);
-                window.location.href = "/";
+                window.location.href = "/login";
             })
             .catch(error => {
                 console.error("Erro ao enviar email", error);
-                window.location.href = "/";
             });
         } else {
             resultadoCadastro.style.color = "red";

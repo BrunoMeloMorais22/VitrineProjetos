@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil do Usuário</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/perfil.css" />
+</head>
+<body>
+  <div class="perfil-container">
+    <div class="perfil-box">
+      <img src="/static/image/portfolio.png" alt="Foto de Perfil" class="foto-perfil" />
+      
+      <h2>{{ nomeCadastro }}</h2>
+      <p><strong>Email:</strong> {{ emailCadastro }}</p>
+      <p><strong>Membro desde:</strong> 2024</p>
+
+      <label class="tema-switch">
+        <input type="checkbox" id="toggleTheme">
+        <span>🌙 Ativar Modo Escuro</span>
+      </label>
+
+      <div class="links">
+        <a href="/configuracoes" class="btn"><i class="fa-solid fa-gear"></i> Configurações</a>
+        <a href="/ajuda" class="btn"><i class="fa-solid fa-circle-question"></i> Ajuda</a>
+        <a href="/contatos" class="btn"><i class="fa-solid fa-address-book"></i> Contatos</a>
+        <a href="/logout" class="btn sair"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/perfil.js"></script>
+</body>
+</html>

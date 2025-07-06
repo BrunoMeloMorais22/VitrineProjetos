@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurações</title>
+  <link rel="stylesheet" href="/static/css/configuracoes.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<body>
+
+  <h2>⚙️ Configurações</h2>
+
+  <div class="abas">
+    <a href="#" data-aba="geral" class="ativa"><i class="fa-solid fa-gear"></i> Geral</a>
+    <a href="#" data-aba="notificacoes"><i class="fa-solid fa-bell"></i> Notificações</a>
+    <a href="#" data-aba="seguranca"><i class="fa-solid fa-shield-halved"></i> Segurança</a>
+  </div>
+
+  <div id="geral" class="conteudo ativo">
+
+  <h3>⚙️ Configurações Gerais</h3>
+
+  <form id="formGeral">
+
+   <p>👤 {{nomeCadastro}}</p>
+
+    <p>📧 {{emailCadastro}}</p>
+
+    <label>🖼️ Foto de Perfil:</label><br>
+    <img src="/static/image/portfolio.png" alt="Foto atual" width="80"><br>
+    <input type="file" id="fotoPerfil" name="fotoPerfil"><br><br>
+
+    <label for="idioma">🌍 Idioma:</label><br>
+    <select id="idioma" name="idioma">
+      <option value="pt">Português</option>
+      <option value="en">Inglês</option>
+      <option value="es">Espanhol</option>
+    </select><br><br>
+
+    <label for="fuso">🕐 Fuso Horário:</label><br>
+    <select id="fuso" name="fuso">
+      <option value="brt">GMT-3 (Brasília)</option>
+      <option value="utc">UTC</option>
+      <option value="pst">GMT-8 (Pacífico)</option>
+    </select><br><br>
+
+    <button type="submit">💾 Salvar Alterações</button>
+  </form>
+</div>
+
+  </div>
+
+  <div id="notificacoes" class="conteudo">
+  <h3>🔔 Configurações de Notificações</h3>
+
+  <form id="formNotificacoes">
+    <label>
+      <input type="checkbox" name="email_newsletter" checked>
+      Receber novidades por e-mail
+    </label><br><br>
+
+    <label>
+      <input type="checkbox" name="email_alertas">
+      Alertas importantes por e-mail
+    </label><br><br>
+
+    <label>
+      <input type="checkbox" name="notificacao_projetos" checked>
+      Notificações sobre projetos (comentários, curtidas etc.)
+    </label><br><br>
+
+    <label>
+      <input type="checkbox" name="notificacao_sistema">
+      Avisos do sistema e atualizações da plataforma
+    </label><br><br>
+
+    <label>
+      <input type="checkbox" name="notificacao_suporte">
+      Mensagens de resposta do suporte técnico
+    </label><br><br>
+
+    <button type="submit">💾 Salvar Preferências</button>
+  </form>
+</div>
+
+  </div>
+
+  <div id="seguranca" class="conteudo">
+  <h3>🛡️ Configurações de Segurança</h3>
+
+  <form id="formSeguranca">
+    <label for="senhaAtual">🔑 Senha atual:</label><br>
+    <input type="password" id="senhaAtual" name="senhaAtual" required><br><br>
+
+    <label for="novaSenha">🔒 Nova senha:</label><br>
+    <input type="password" id="novaSenha" name="novaSenha" required><br><br>
+
+    <label for="confirmarSenha">✅ Confirmar nova senha:</label><br>
+    <input type="password" id="confirmarSenha" name="confirmarSenha" required><br><br>
+
+    <span id="resultadoSenha"></span>
+    <hr><br>
+
+    <label>
+      <input type="checkbox" name="verificacao_dupla">
+      Ativar verificação em duas etapas (2FA)
+    </label><br><br>
+
+    <button type="submit">🔐 Atualizar Segurança</button>
+  </form>
+</div>
+
+
+  <script src="/static/js/configuracoes.js"></script>
+</body>
+</html>
