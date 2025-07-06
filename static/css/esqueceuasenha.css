@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body{
+    background: linear-gradient(to right, rgb(45, 235, 61), rgb(0, 167, 8));
+}
+
+#formEsqueceuSenha{
+    background: rgb(0, 255, 64);
+    padding: 30px;
+    width: 600px;
+    text-align: center;
+    margin: 200px auto;
+}
+
+#formEsqueceuSenha > p{
+    font-size: 20px;
+}
+
+label, input{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    width: 250px;
+    padding: 3px;
+}
+
+input::placeholder{
+    text-align: center;
+}
+
+button{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    padding: 3px;
+}

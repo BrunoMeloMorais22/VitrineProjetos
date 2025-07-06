@@ -39,6 +39,11 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
+#formGeral > button{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+}
+
 #idioma{
     font-family: 'Montserrat', sans-serif;
 }
@@ -46,3 +51,14 @@ body {
 #fuso{
     font-family: 'Montserrat', sans-serif;
 }
+
+#formSeguranca > button{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+}
+
+.voltar{
+    text-decoration: none;
+    font-weight: bold;
+}
+
