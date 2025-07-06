@@ -118,9 +118,11 @@ def login():
         user = usuarios.query.filter_by(emailCadastro=emailLogin).first()
 
         if user and check_password_hash(user.senhaCadastro, senhaLogin):
-            session['usuario'] = user.emailCadastro
-            session['nomeCadastro'] = user.nomeCadastro
-            session['emailCadastro'] = user.emailCadastro
+            session['usuario'] = {
+                "id": user.id,
+                "nome": user.nomeCadastro,
+                "email": user.emailCadastro
+            }
             return jsonify({"mensagem": "Login efetuado com sucesso"})
         else:
             return jsonify({"mensagem": "Email ou senha incorretos"}), 401
@@ -129,7 +131,7 @@ def login():
 @app.route("/verificar_login")
 def verificar_login():
     if 'usuario' in session:
-        return jsonify({"logado": True, "emailCadastro": session['usuario']})
+        return jsonify({"logado": True, "emailCadastro": session['usuario']['email']})
     return jsonify({"logado": False})
 
 @app.route("/logout")
@@ -142,11 +144,13 @@ def cadastrar_projeto():
     if request.method == "GET":
         return render_template("projetos.html")
     
+    if 'usuario' not in session:
+        return jsonify({"mensagem": "Usuário não autenticado"}), 401
+    
     try:
         nomeProjeto = request.form.get("nomeProjeto")
         descricaoProjeto = request.form.get("descricaoProjeto")
         link = request.form.get("link")
-        nomePessoaProjeto = request.form.get("nomePessoaProjeto")
         linguagens = request.form.get("linguagens")
         imagem = request.files.get("imagem")
 
@@ -157,13 +161,16 @@ def cadastrar_projeto():
         caminho = os.path.join("static/uploads", nome_imagem)
         imagem.save(caminho)
 
+        usuario = session['usuario']
+        dono_id = usuario['id']
+
         novo_projeto = projetos(
             nomeProjeto=nomeProjeto,
             descricaoProjeto=descricaoProjeto,
             link=link,
             linguagens=linguagens,
             imagem=nome_imagem,
-            nomePessoaProjeto=nomePessoaProjeto
+            dono_id=dono_id,
         )
         db.session.add(novo_projeto)
         db.session.commit()
@@ -176,8 +183,8 @@ def cadastrar_projeto():
 
 @app.route("/perfil")
 def perfil():
-    nomeCadastro = session.get("nomeCadastro")
-    emailCadastro = session.get("emailCadastro")
+    nomeCadastro = session['usuario']['nome']
+    emailCadastro = session['usuario']['email']
     return render_template("perfil.html", nomeCadastro=nomeCadastro, emailCadastro=emailCadastro)
 
 
@@ -206,7 +213,7 @@ def seguranca():
     if novaSenha != confirmarSenha:
         return jsonify({"mensagem": "As senhas não combinam"})
     
-    email_usuario = session.get("usuario")
+    email_usuario = session["usuario"]["email"]
     user = usuarios.query.filter_by(emailCadastro=email_usuario).first()
 
     if not user:
@@ -282,3 +289,8 @@ def redefinir_senha(token):
         return jsonify({"mensagem": "Senha redefinida com sucesso!!!"}), 200
     
     return render_template("redefinir_senha.html")
+
+if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True, port=8000)

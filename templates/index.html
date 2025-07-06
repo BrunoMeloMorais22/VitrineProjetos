@@ -21,7 +21,7 @@
     </header>
 
     <section id="hero">
-        <h1>Crie seu portfolio online. Gratuito e Profissional</h1>
+        <h1>Crie seu portfólio online. Gratuito e Profissional</h1>
         <p>Publique seus projetos visuais, mostre suas habilidades e descubra o trabalho de outros criadores</p>
         <a href="/cadastrar_projeto">Publicar meus projetos</a></button>
     </section>
@@ -81,7 +81,7 @@
       <br><br><br>
   {% for projeto in projetos %}
 <div class="usuario-container">
-  <h3>{{ projeto.nomePessoaProjeto }}</h3>
+  <h3>{{ projeto.dono.nomeCadastro }}</h3>
     <div class="card">
       <img src="{{ url_for('static', filename='uploads/' + projeto.imagem) }}" alt="{{ projeto.nomeProjeto }}">
       <div class="conteudo">

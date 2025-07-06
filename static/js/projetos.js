@@ -20,11 +20,10 @@ document.getElementById("form-projeto").addEventListener("submit", async functio
 
   const form = e.target;
   const nomeProjeto = form.nomeProjeto.value.trim();
-  const nomePessoaProjeto = form.nomePessoaProjeto.value.trim();
   const descricaoProjeto = form.descricaoProjeto.value.trim();
   const link = form.link.value.trim();
 
-  if (!nomeProjeto || !descricaoProjeto || linguagensSelecionadas.length === 0) {
+  if (!descricaoProjeto || linguagensSelecionadas.length === 0) {
     document.getElementById("resultadoProjeto").innerText =
       "Preencha todos os campos e selecione pelo menos uma linguagem.";
     return;
