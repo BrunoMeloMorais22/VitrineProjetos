@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request, jsonify, session
 from datetime import timedelta
 import smtplib
+import requests
 from sqlalchemy import func
 from email.message import EmailMessage
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -14,6 +15,8 @@ app = Flask(__name__)
 app.secret_key = "corinthians"
 serializer = URLSafeTimedSerializer(app.secret_key)
 
+RECAPTCHA_SITE_KEY = "6LfgoXwrAAAAAMiavVD4pnLJflZdA6SSyatyETWT"
+RECAPTCHA_SECRET_KEY = "6LfgoXwrAAAAAKkkfxULDqY-J5mAz7ogIBnyp3FE"
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
@@ -34,7 +37,7 @@ def index():
 @app.route("/cadastro", methods=["GET", "POST"])
 def cadastro():
     if request.method == "GET":
-        return render_template("cadastro.html")
+        return render_template("cadastro.html", site_key=RECAPTCHA_SITE_KEY)
     try:
         if request.method == "POST":
             data = request.get_json()
@@ -46,6 +49,18 @@ def cadastro():
             emailCadastro = data.get("emailCadastro")
             senhaCadastro = data.get("senhaCadastro")
             confirmarSenha = data.get("confirmarSenha")
+            recaptcha_response = data.get("g-recaptcha-response")
+
+            if not recaptcha_response:
+                return jsonify({"mensagem": "Por favor, confirme que você não é um robô"})
+            
+            data = {
+                "secret": RECAPTCHA_SECRET_KEY,
+                "response": recaptcha_response
+            }
+
+            r = requests.post("https://www.google.com/recaptcha/api/siteverify", data=data)
+            resultado = r.json()
 
 
             if not nomeCadastro or not emailCadastro or not senhaCadastro or not confirmarSenha:
@@ -233,7 +248,7 @@ def esqueci_senha():
     if request.method == "POST":
         data = request.get_json()
 
-        emailRedefinição = data.get("emailRedefinição")
+        emailRedefinição = data.get("email")
 
         if not emailRedefinição:
             return jsonify({"mensagem": "Preencha o campo email por favor"})

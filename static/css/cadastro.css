@@ -124,3 +124,7 @@ body {
 #links_extras > a:hover{
   text-decoration: underline;
 }
+
+.g-recaptcha {
+  margin-top: 15px;
+}
