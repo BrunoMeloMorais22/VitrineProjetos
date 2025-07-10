@@ -15,8 +15,8 @@ app = Flask(__name__)
 app.secret_key = "corinthians"
 serializer = URLSafeTimedSerializer(app.secret_key)
 
-RECAPTCHA_SITE_KEY = "6LfgoXwrAAAAAMiavVD4pnLJflZdA6SSyatyETWT"
-RECAPTCHA_SECRET_KEY = "6LfgoXwrAAAAAKkkfxULDqY-J5mAz7ogIBnyp3FE"
+RECAPTCHA_SITE_KEY = "6Levt30rAAAAAJJzfOzcnPSFrx5RPHj2yp2qMVq5"
+RECAPTCHA_SECRET_KEY = "6Levt30rAAAAAMRCl0z4lAtpOHRt8tgcH9be-4_S"
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
@@ -28,6 +28,7 @@ db.init_app(app)
 CORS(app, supports_credentials=True)
 from models import usuarios
 from models import projetos
+from models import Denuncia
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -169,7 +170,7 @@ def cadastrar_projeto():
         linguagens = request.form.get("linguagens")
         imagem = request.files.get("imagem")
 
-        if not nomeProjeto or not descricaoProjeto or not linguagens or not imagem:
+        if not nomeProjeto or not descricaoProjeto or not linguagens:
             return jsonify({"mensagem": "Preencha todos os campos"}), 400
 
         nome_imagem = imagem.filename
@@ -304,6 +305,25 @@ def redefinir_senha(token):
         return jsonify({"mensagem": "Senha redefinida com sucesso!!!"}), 200
     
     return render_template("redefinir_senha.html")
+
+@app.route("/denunciar/<int:projeto_id>", methods=["POST"])
+def denunciar(projeto_id):
+    if request.method == "POST":
+        data = request.get_json()
+
+        motivo = data.get("motivo")
+        email = session.get("usuario",  {}).get("email")
+
+        nova_denuncia = Denuncia(
+            projeto_id=projeto_id,
+            email_usuario = email,
+            motivo = motivo
+        )
+
+        db.session.add(nova_denuncia)
+        db.session.commit()
+
+        return redirect(url_for("index"))
 
 if __name__ == "__main__":
     with app.app_context():
