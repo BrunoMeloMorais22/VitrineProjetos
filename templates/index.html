@@ -84,7 +84,7 @@
       <br><br><br>
   {% for projeto in projetos %}
 <div class="usuario-container">
-  <h3>{{ projeto.dono.nomeCadastro }}</h3>
+  <h3>{{ projetos.nomeCadastro }}</h3>
     <div class="card">
       <img src="{{ url_for('static', filename='uploads/' + projeto.imagem) }}" alt="{{ projeto.nomeProjeto }}">
       <div class="conteudo">
