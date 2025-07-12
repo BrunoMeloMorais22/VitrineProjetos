@@ -9,6 +9,15 @@ function fazerCadastro(event) {
     
     let recaptcha_response = grecaptcha.getResponse()
 
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+
+    if(!regex.test(senhaCadastro)){
+        resultadoCadastro.textContent = "Sua senha precisa ter: 8 caracteres, 1 letra maiúscula, 1 caractere especial e 1 número"
+        resultadoCadastro.style.color = "red"
+        resultadoCadastro.style.fontWeight = "bold"
+        return
+    }
+
     if(recaptcha_response === ""){
         resultadoCadastro.innerText = "Por favor, confirme que você não é um robô"
         resultadoCadastro.style.color = "red"

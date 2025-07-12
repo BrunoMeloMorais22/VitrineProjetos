@@ -234,8 +234,8 @@ def perfil():
 
 @app.route("/configuracoes", methods=["GET", "POST"])
 def configuracoes():
-    nomeCadastro = session.get("nomeCadastro")
-    emailCadastro = session.get("emailCadastro")
+    nomeCadastro = session["usuario"]["nome"]
+    emailCadastro = session["usuario"]["email"]
     return render_template("configuracoes.html", nomeCadastro=nomeCadastro, emailCadastro=emailCadastro)
 
 @app.route("/seguranca", methods=["POST"])
@@ -391,6 +391,42 @@ def enviar_ajuda():
     except Exception as e:
         print("Erro ao salvar mensagem", e)
         return jsonify({"mensagem": "Erro ao salvar mensagem"})
+    
+@app.route("/admin/ajuda")
+def admin_ajuda():
+    con = conectar()
+    cursor = con.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT ma.id, u.nomeCadastro, ma.mensagem, ma.resposta_admin, ma.data_envio
+        FROM mensagem_ajuda ma
+        JOIN usuarios u ON ma.id_usuario = u.id
+        ORDER BY ma.data_envio DESC
+    """)
+    mensagens = cursor.fetchall()
+    cursor.close()
+    con.close()
+    return render_template("admin_ajuda.html", mensagens=mensagens)
+
+
+@app.route("/responder_ajuda/<int:id_mensagem>", methods=["POST"])
+def responder_ajuda(id_mensagem):
+    resposta_admin = request.form.get("resposta_admin")
+
+    try:
+        con = conectar()
+        cursor = con.cursor()
+
+        sql = "UPDATE mensagem_ajuda SET resposta_admin = %s WHERE id = %s"
+        cursor.execute(sql, (resposta_admin, id_mensagem))
+        con.commit()
+
+        cursor.close()
+        con.close()
+
+        return redirect(url_for("admin_ajuda"))
+    except Exception as e:
+        print("Erro ao responder", e)
+        return jsonify({"mensagem": "Erro ao responder"})
 
 if __name__ == "__main__":
     with app.app_context():

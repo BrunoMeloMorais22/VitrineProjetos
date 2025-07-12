@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin - Mensagens de Ajuda</title>
+    <link rel="stylesheet" href="/static/css/admin_ajuda.css">
+</head>
+<body>
+    <h1>Mensagens de Ajuda</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuário</th>
+                <th>Mensagem</th>
+                <th>Resposta do Admin</th>
+                <th>Data de Envio</th>
+                <th>Responder</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for msg in mensagens %}
+            <tr>
+                <td>{{ msg.id }}</td>
+                <td>{{ msg.nomeCadastro }}</td>
+                <td>{{ msg.mensagem }}</td>
+                <td>{% if msg.resposta_admin %}{{ msg.resposta_admin }}{% else %}<em>Sem resposta</em>{% endif %}</td>
+                <td>{{ msg.data_envio }}</td>
+                <td>
+                    <form action="{{ url_for('responder_ajuda', id_mensagem=msg.id) }}" method="POST">
+                        <textarea name="resposta_admin" placeholder="Escreva sua resposta aqui..."></textarea>
+                        <button type="submit">Enviar Resposta</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
