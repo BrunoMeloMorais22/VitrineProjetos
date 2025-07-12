@@ -100,7 +100,7 @@ def cadastro():
         con = conectar()
         cur = con.cursor(dictionary=True)
         
-        cur.execute = ("SELECT * FROM usuarios WHERE emailCadastro = %s", (emailCadastro,))
+        cur.execute("SELECT * FROM usuarios WHERE emailCadastro = %s", (emailCadastro,))
         user_exists = cur.fetchone()
 
         if user_exists:
@@ -360,6 +360,37 @@ def denunciar(projeto_id):
 
     return jsonify({"mensagem": "Denúncia enviada com sucesso"})
 
+@app.route("/ajuda")
+def ajuda():
+    return render_template("ajuda.html")
+
+@app.route("/enviar_ajuda", methods=["POST"])
+def enviar_ajuda():
+    if "usuario" not in session:
+        return jsonify({"mensagem": "Por favor, você precisa estar logado para enviar a mensagem"})
+    
+    data = request.get_json()
+    if not data:
+        return jsonify({"mensagem": "Dados não recebidos"})
+    
+    mensagem = data.get("mensagem")
+
+    if not mensagem:
+        return jsonify({"mensagem": "Mensagem Vazia"})
+    
+    try:
+        con = conectar()
+        cursor = con.cursor()
+        sql = "INSERT INTO mensagem_ajuda(id_usuario, mensagem) VALUES(%s, %s)"
+        cursor.execute(sql, (session["usuario"]["id"], mensagem))
+        con.commit()
+        cursor.close()
+        con.close()
+
+        return jsonify({"mensagem": "Mensagem enviada com sucesso"})
+    except Exception as e:
+        print("Erro ao salvar mensagem", e)
+        return jsonify({"mensagem": "Erro ao salvar mensagem"})
 
 if __name__ == "__main__":
     with app.app_context():

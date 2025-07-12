@@ -24,7 +24,7 @@ function fazerCadastro(event) {
     .then(data => {
         resultadoCadastro.innerHTML = data.mensagem;
 
-        if (data.mensagem === "Usuário cadastro com sucesso!") {
+        if (data.mensagem === "Usuário cadastrado com sucesso!") {
             resultadoCadastro.style.color = "green";
 
             fetch("/enviar_email", {
@@ -43,6 +43,8 @@ function fazerCadastro(event) {
         } else {
             resultadoCadastro.style.color = "red";
         }
+
+        grecaptcha.reset()
     })
     .catch(error => {
         resultadoCadastro.innerText = "Erro ao se conectar com o servidor";

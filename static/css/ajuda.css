@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+body {
+  background-color: #f9f9f9;
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+      font-family: 'Montserrat', sans-serif;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+form#formAjuda {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 25px 30px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  margin-bottom: 20px;
+  color: #0033a0;
+  text-align: center;
+}
+
+textarea#mensagemAjuda {
+  resize: vertical;
+  min-height: 150px;
+  padding: 12px 15px;
+  font-size: 1rem;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  transition: border-color 0.3s ease;
+}
+
+textarea#mensagemAjuda:focus {
+  outline: none;
+  border-color: #0033a0;
+  box-shadow: 0 0 6px rgba(0, 51, 160, 0.3);
+}
+
+button[type="submit"] {
+  background-color: #0033a0;
+  color: #fff;
+  border: none;
+  padding: 12px 0;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #001f66;
+}
+
+p#respostaStatus {
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 600;
+  color: #006400;
+  min-height: 24px;
+}
+
+a{
+    text-align: center;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+
