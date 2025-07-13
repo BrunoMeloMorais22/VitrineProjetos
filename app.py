@@ -6,6 +6,7 @@ import mysql.connector
 from email.message import EmailMessage
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
+from collections import defaultdict
 import os
 from itsdangerous import Serializer, URLSafeTimedSerializer
 
@@ -50,6 +51,15 @@ def get_projetos_com_dono():
     conexao.close()
     return projetos
 
+def get_projetos_agrupados_por_dono():
+    projetos = get_projetos_com_dono()
+    agrupado = defaultdict(list)
+
+    for projeto in projetos:
+        agrupado[projeto["nomeDono"]].append(projeto)
+
+    return agrupado
+
 def conectar():
     return mysql.connector.connect(
         host = "localhost",
@@ -60,8 +70,9 @@ def conectar():
 
 @app.route("/")
 def index():
-    projetos = get_projetos_com_dono()
-    return render_template("index.html", projetos=projetos)
+    projetos_agrupados = get_projetos_agrupados_por_dono()
+
+    return render_template("index.html", projetos_agrupados=projetos_agrupados)
 
 @app.route("/cadastro", methods=["GET", "POST"])
 def cadastro():
@@ -474,6 +485,64 @@ def projeto_curtido(dono_id):
     except Exception as e:
         print("Erro ao enviar curtida", e)
         return jsonify({"mensagem": "Erro ao curtir projeto"})
+    
+@app.route("/configuracoes/notificacoes", methods=["GET"])
+def carregar_notificacoes():
+    if "usuario" not in session:
+        return jsonify({"mensagem": "Usuário não autenticado"}), 401
+    
+    con = conectar()
+    cur = con.cursor(dictionary=True)
+    cur.execute("SELECT * FROM notificacoes_usuario WHERE id_usuario = %s", (session["usuario"]["id"],))
+    prefs = cur.fetchone()
+    cur.close()
+    con.close()
+
+    return jsonify({prefs if prefs else{}})
+
+@app.route("/configuracoes/notificacoes", methods=["POST"])
+def salvar_notificacoes():
+    if "usuario" not in session:
+        return jsonify({"mensagem": "Usuário nao autenticado"}), 401
+    
+    data = request.get_json()
+    id_usuario = session["usuario"]["id"]
+
+    con = conectar()
+    cur = con.cursor()
+    cur.execute("SELECT id FROM notificacoes_usuario WHERE id_usuario = %s", (id_usuario,))
+    existe = cur.fetchone()
+
+    campos = (
+        data.get("email_newsletter", False),
+        data.get("email_alertas", False),
+        data.get("notificacao_projetos", False),
+        data.get("notificacao_sistema", False),
+        data.get("notificacao_suporte", False),
+    )
+
+    if existe:
+        cur.execute("""
+            UPDATE notificacoes_usuario SET
+              email_newsletter=%s,
+              email_alertas=%s,
+              notificacao_projetos=%s,
+              notificacao_sistema=%s,
+              notificacao_suporte=%s
+            WHERE id_usuario=%s """, campos + (id_usuario,))
+    else:
+        cur.execute("""
+            INSERT INTO notificacoes_usuario (
+              email_newsletter, email_alertas, notificacao_projetos,
+              notificacao_sistema, notificacao_suporte, id_usuario
+            ) VALUES (%s, %s, %s, %s, %s, %s)
+        """, campos + (id_usuario,))
+
+    con.commit()
+    cur.close()
+    con.close()
+
+    return jsonify({"mensagem": "Preferências salvas com sucesso!"})
 
 if __name__ == "__main__":
     with app.app_context():

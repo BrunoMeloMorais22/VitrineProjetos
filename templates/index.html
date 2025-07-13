@@ -56,7 +56,6 @@
           <p>Site feito com HTMl, CSS, JavaScript, Flask, com conexão com backend. Conecte-se com novas pessoas, compartilher experiências e participe de eventos</p>
           <p><strong>Linguagens:</strong>JavaScript, Python(flask), Mysql</p> <br>
           <a href="https://networking-pi.vercel.app">Ver projeto</a>
-          <i class="fa-solid fa-heart"></i>
 
         </div>
       </div>
@@ -67,7 +66,6 @@
           <p>Site de lista de tarefas, coloque o que precisa fazer hoje, exclua quando terminar</p>
           <p><strong>Linguagens:</strong>Html, Css, JavaScript</p> <br>
           <a href="https://brunomelomorais22.github.io/To-Do-List/">Ver projeto</a>
-          <i class="fa-solid fa-heart"></i>
 
         </div>
       </div>
@@ -79,27 +77,33 @@
             <p>Este é o meu portfólio pessoal, desenvolvido com foco em apresentar meus projetos, habilidades e experiências na área de desenvolvimento web. Criado com HTML, CSS, JavaScript e Flask, o site conta com design responsivo, seção de contato, e integração com backend. Aqui você pode conhecer meus principais trabalhos, minhas tecnologias favoritas e entrar em contato comigo de forma rápida e prática.</p>
             <p><strong>Linguagens:</strong>JavaScript, Python(flask), Mysql</p> <br>
             <a href="https://portfolio-gamma-pearl-18.vercel.app">Ver projeto</a>
-            <i class="fa-solid fa-heart"></i>
+
           </div>
       </div>
       
       <br><br><br>
-  {% for projeto in projetos %}
-<div class="usuario-container">
-  <h3>{{ projetos.nomeCadastro }}</h3>
-    <div class="card">
-      <img src="{{ url_for('static', filename='uploads/' + projeto.imagem) }}" alt="{{ projeto.nomeProjeto }}">
-      <div class="conteudo">
-        <h4>{{ projeto.nomeProjeto }}</h4>
-        <p>{{ projeto.descricaoProjeto }}</p>
-        <p><strong>Linguagens:</strong> {{ projeto.linguagens }}</p>
-        <a href="{{ projeto.link }}" target="_blank" class="botao">Ver Projeto</a>
-        <i onclick="denuncia('{{ projeto.id }}')" class="fa-solid fa-triangle-exclamation"></i>
-        <i class="fa-solid fa-heart" data-dono-id="{{ projeto.dono_id }}"></i>
-      </div>
+  {% for nome_dono, projetos in projetos_agrupados.items() %}
+  <div class="usuario-container">
+    <h3>{{ nome_dono }}</h3>
+    <div class="galeria">
+      {% for projeto in projetos %}
+        <div class="card">
+          <img src="{{ url_for('static', filename='uploads/' + projeto.imagem) }}" alt="{{ projeto.nomeProjeto }}">
+          <div class="conteudo">
+            <h4>{{ projeto.nomeProjeto }}</h4>
+            <p>{{ projeto.descricaoProjeto }}</p>
+            <p><strong>Linguagens:</strong> {{ projeto.linguagens }}</p>
+            <a href="{{ projeto.link }}" target="_blank" class="botao">Ver Projeto</a>
+            <i onclick="denuncia('{{ projeto.id }}')" class="fa-solid fa-triangle-exclamation"></i>
+            <i class="fa-solid fa-heart" data-dono-id="{{ projeto.dono_id }}"></i>
+          </div>
+        </div>
+      {% endfor %}
     </div>
-</div>
+  </div>
 {% endfor %}
+
+
 
 <div id="modalDenuncia" class="modal-overlay">
   <div class="modal">
