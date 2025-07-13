@@ -39,3 +39,23 @@ function confirmarDenuncia() {
         fecharModal()
     })
 }
+
+document.querySelectorAll(".fa-heart").forEach(coracao => {
+    coracao.addEventListener("click", function () {
+        const donoId = coracao.getAttribute("data-dono-id");
+
+        coracao.classList.toggle("curtido");
+
+        fetch(`/projeto_curtido/${donoId}`, {
+            method: "POST"
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.mensagem);
+        })
+        .catch(err => {
+            console.error("Erro ao curtir projeto", err);
+            alert("Erro ao curtir o projeto");
+        });
+    });
+});

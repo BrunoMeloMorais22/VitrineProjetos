@@ -177,7 +177,7 @@ nav > a{
 
 .fa-triangle-exclamation{
     margin-top: 10px;
-    margin-left: 130px;
+    margin-left: 100px;
 }
 
 .fa-triangle-exclamation:hover{
@@ -204,6 +204,12 @@ nav > a{
   text-align: center;
 }
 
+.fa-heart:hover{
+    cursor: pointer;
+}
+.curtido {
+    color: red;
+}
 
 
 

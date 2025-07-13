@@ -427,6 +427,53 @@ def responder_ajuda(id_mensagem):
     except Exception as e:
         print("Erro ao responder", e)
         return jsonify({"mensagem": "Erro ao responder"})
+    
+@app.route("/projeto_curtido/<int:dono_id>", methods=["POST"])
+def projeto_curtido(dono_id):
+    if 'usuario' not in session:
+        return jsonify({"mensagem": "Você precisa estar logado para curtir os projetos"})
+
+    try:
+        nomeCadastro = session["usuario"]["nome"]
+        emailCadastro = session["usuario"]["email"]   
+
+        con = conectar()
+        cur = con.cursor(dictionary=True)
+        cur.execute("SELECT emailCadastro FROM usuarios WHERE id = %s", (dono_id,))
+        dono = cur.fetchone()
+        cur.close()
+        con.close()
+
+        if not dono:
+            return jsonify({"mensagem": "Dono do projeto não encontrado"}), 404
+
+        email_dono = dono["emailCadastro"] 
+
+        msg = EmailMessage()
+        msg["Subject"] = "📌 Seu projeto foi curtido!"
+        msg["From"] = "grumelo098@gmail.com"
+        msg["To"] = email_dono
+        msg.add_alternative(f"""
+        <!DOCTYPE html>
+            <html>
+                <body>
+                    <h2>💖 Seu projeto foi curtido!</h2>
+                    <p>O usuário <strong>{nomeCadastro}</strong> ({emailCadastro}) curtiu o seu projeto na plataforma.</p>
+                    <hr>
+                    <p>Continue compartilhando seus projetos com a comunidade! 🚀</p>
+                </body>
+            </html>
+        """, subtype='html')
+
+
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+            smtp.login("grumelo098@gmail.com", "ourf sgnz wkiw sxse")
+            smtp.send_message(msg)
+
+        return jsonify({"mensagem": "Curtida enviada com sucesso!"})
+    except Exception as e:
+        print("Erro ao enviar curtida", e)
+        return jsonify({"mensagem": "Erro ao curtir projeto"})
 
 if __name__ == "__main__":
     with app.app_context():
