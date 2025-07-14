@@ -18,3 +18,42 @@ textarea {
 button { 
     padding: 6px 12px; 
 }
+
+
+@media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    thead tr {
+        display: none;
+    }
+    tr {
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 8px;
+        background: #fafafa;
+    }
+    td {
+        border: none;
+        padding: 6px 10px;
+        position: relative;
+        padding-left: 50%;
+        text-align: left;
+    }
+    td::before {
+        position: absolute;
+        top: 6px;
+        left: 10px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: bold;
+        content: attr(data-label);
+        text-align: left;
+        color: #555;
+    }
+    textarea {
+        height: 80px;
+    }
+}

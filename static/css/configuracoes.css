@@ -66,3 +66,18 @@ body {
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
 }
+
+@media (max-width: 600px) {
+  .abas {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .abas a {
+    padding: 12px;
+    font-size: 1rem;
+    text-align: center;
+  }
+  .conteudo {
+    padding: 15px 10px;
+  }
+}

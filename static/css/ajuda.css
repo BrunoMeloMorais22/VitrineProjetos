@@ -84,3 +84,30 @@ a:hover{
     text-decoration: underline;
 }
 
+@media (max-width: 600px) {
+  body {
+    padding: 15px;
+    align-items: center;
+  }
+
+  form#formAjuda {
+    padding: 20px;
+    max-width: 100%;
+    box-shadow: none;
+  }
+
+  textarea#mensagemAjuda {
+    min-height: 120px;
+    font-size: 0.9rem;
+  }
+
+  button[type="submit"] {
+    font-size: 1rem;
+    padding: 10px 0;
+  }
+
+  a {
+    font-size: 0.9rem;
+  }
+}
+

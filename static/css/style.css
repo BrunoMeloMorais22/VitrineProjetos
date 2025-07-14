@@ -245,6 +245,62 @@ nav > a{
   padding: 15px;
 }
 
+@media (max-width: 768px) {
+  #hero {
+    padding: 40px 20px;
+    font-size: 18px;
+  }
+
+  .passos {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .passos > div {
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+  }
+
+  .galeria {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 10px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  nav > a {
+    margin-left: 0;
+    font-size: 16px;
+  }
+
+  #hero {
+    padding: 30px 15px;
+    font-size: 16px;
+  }
+
+  .passos > div {
+    padding: 15px;
+  }
+
+  .card .conteudo {
+    padding: 10px;
+  }
+}
 
 
 

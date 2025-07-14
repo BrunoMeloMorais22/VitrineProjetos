@@ -176,3 +176,47 @@ body {
   color: #fff;
   font-weight: bold;
 }
+
+@media (max-width: 480px) {
+  .left > img {
+    width: 100%;
+    max-width: 300px;
+    margin: 20px auto 0 auto;
+    display: block;
+  }
+
+  .left h1 {
+    font-size: 32px;
+  }
+
+  .left p {
+    font-size: 14px;
+  }
+
+  .left .btn {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .right {
+    padding: 30px 20px;
+  }
+
+  .right h2 {
+    font-size: 22px;
+  }
+
+  .form-group input,
+  .submit-btn {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .social i {
+    font-size: 18px;
+    margin: 0 8px;
+  }
+}
+

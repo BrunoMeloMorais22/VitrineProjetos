@@ -76,7 +76,6 @@ body {
   background-color: #a93226;
 }
 
-/* Modo escuro */
 body.dark-mode {
   background-color: #1e1e1e;
   color: #f0f0f0;
@@ -93,4 +92,30 @@ body.dark-mode .btn {
 
 body.dark-mode .btn:hover {
   background-color: #e6c200;
+}
+
+@media (max-width: 600px) {
+  .perfil-container {
+    padding: 20px;
+  }
+
+  .perfil-box {
+    width: 100%;
+    padding: 20px;
+    box-shadow: none;
+  }
+
+  .foto-perfil {
+    width: 100px;
+    height: 100px;
+  }
+
+  .btn {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .links {
+    gap: 8px;
+  }
 }
