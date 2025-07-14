@@ -225,7 +225,15 @@ def cadastrar_projeto():
 
     dono_id = session['usuario']['id']
     con = conectar()
-    cur = con.cursor()
+    cur = con.cursor(dictionary=True)
+
+
+    cur.execute("SELECT COUNT(*) AS total FROM projetos WHERE dono_id = %s", (dono_id,))
+    quantidade = cur.fetchone()['total']
+
+    if quantidade >= 3:
+        return jsonify({"mensagem": "Limite de 3 projetos atingido"}), 400
+    
     cur.execute("""
         INSERT INTO projetos (nomeProjeto, descricaoProjeto, link, linguagens, imagem, dono_id)
         VALUES (%s, %s, %s, %s, %s, %s)
