@@ -22,7 +22,17 @@ function fazerLogin(event){
             resultadoLogin.style.fontWeight = "bold"
             
             setTimeout(() => {
-                window.location.href = "/"
+                if(data.admin === "ajuda"){
+                    window.location.href = "/admin/ajuda"
+                }
+
+                else if(data.admin === "denuncia"){
+                    window.location.href = "/painel_admin"
+                }
+
+                else{
+                    window.location.href = "/"
+                }
             }, 2000)
         }
         

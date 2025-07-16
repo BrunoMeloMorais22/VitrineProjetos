@@ -15,6 +15,12 @@ app = Flask(__name__)
 app.secret_key = "corinthians"
 serializer = URLSafeTimedSerializer(app.secret_key)
 
+ADMIN_EMAIL_AJUDA = 'adminajuda@gmail.com'
+ADMIN_SENHA_AJUDA = 'Adminajuda@098'
+
+ADMIN_EMAIL_DENUNCIA = "admindenuncia@gmail.com"
+ADMIN_SENHA_DENUNCIA = "Admindenuncia@098"
+
 RECAPTCHA_SITE_KEY = "6Levt30rAAAAAJJzfOzcnPSFrx5RPHj2yp2qMVq5"
 RECAPTCHA_SECRET_KEY = "6Levt30rAAAAAMRCl0z4lAtpOHRt8tgcH9be-4_S"
 
@@ -184,6 +190,14 @@ def login():
     cur.execute("SELECT * FROM usuarios WHERE emailCadastro = %s", (email,))
     user = cur.fetchone()
     con.close()
+
+    if email == ADMIN_EMAIL_AJUDA and senha == ADMIN_SENHA_AJUDA:
+        session['admin'] = True
+        return jsonify({"mensagem": "Login efetuado com sucesso", "admin": "ajuda"})
+    
+    if email == ADMIN_EMAIL_DENUNCIA and senha == ADMIN_SENHA_DENUNCIA:
+        session['admin'] = True
+        return jsonify({"mensagem": "Login efetuado com sucesso", "admin": "denuncia"})
 
     if user and check_password_hash(user["senhaCadastro"], senha):
         session['usuario'] = {"id": user['id'], "nome": user['nomeCadastro'], "email": user['emailCadastro']}
@@ -551,6 +565,34 @@ def salvar_notificacoes():
     con.close()
 
     return jsonify({"mensagem": "Preferências salvas com sucesso!"})
+
+@app.route("/painel_admin", methods=["GET", "POST"])
+def painel_admin():
+    if request.method == "GET":
+        con = conectar()
+        cur = con.cursor(dictionary=True)
+
+        cur.execute("""
+            SELECT 
+                projetos.nomeProjeto, 
+                projetos.descricaoProjeto, 
+                projetos.link, 
+                projetos.linguagens, 
+                projetos.imagem, 
+                projetos.data_criacao ,
+                denuncia.motivo
+            FROM 
+                projetos
+            JOIN 
+                denuncia ON denuncia.projeto_id = projetos.id
+        """)
+
+        projetos_denunciados = cur.fetchall()
+        cur.close()
+        con.close()
+
+        return render_template("painel_admin.html", projetos=projetos_denunciados)
+
 
 if __name__ == "__main__":
     with app.app_context():
