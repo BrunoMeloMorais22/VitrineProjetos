@@ -15,11 +15,17 @@ app = Flask(__name__)
 app.secret_key = "corinthians"
 serializer = URLSafeTimedSerializer(app.secret_key)
 
+tipo = 'admin_metrica'
+
 ADMIN_EMAIL_AJUDA = 'adminajuda@gmail.com'
 ADMIN_SENHA_AJUDA = 'Adminajuda@098'
 
 ADMIN_EMAIL_DENUNCIA = "admindenuncia@gmail.com"
 ADMIN_SENHA_DENUNCIA = "Admindenuncia@098"
+
+ADMIN_EMAIL_METRICA = "adminmetrica@gmail.com"
+ADMIN_SENHA_METRICA = "Adminmetrica@098"
+
 
 RECAPTCHA_SITE_KEY = "6Levt30rAAAAAJJzfOzcnPSFrx5RPHj2yp2qMVq5"
 RECAPTCHA_SECRET_KEY = "6Levt30rAAAAAMRCl0z4lAtpOHRt8tgcH9be-4_S"
@@ -192,13 +198,17 @@ def login():
     con.close()
 
     if email == ADMIN_EMAIL_AJUDA and senha == ADMIN_SENHA_AJUDA:
-        session['admin'] = True
+        session['admin'] = "ajuda"
         return jsonify({"mensagem": "Login efetuado com sucesso", "admin": "ajuda"})
     
     if email == ADMIN_EMAIL_DENUNCIA and senha == ADMIN_SENHA_DENUNCIA:
-        session['admin'] = True
+        session['admin'] = "denuncia"
         return jsonify({"mensagem": "Login efetuado com sucesso", "admin": "denuncia"})
-
+    
+    if email == ADMIN_EMAIL_METRICA and senha == ADMIN_SENHA_METRICA:
+        session['admin'] = "metrica"
+        return jsonify({"mensagem": "Login efetuado com sucesso", "admin": "metrica"})
+    
     if user and check_password_hash(user["senhaCadastro"], senha):
         session['usuario'] = {"id": user['id'], "nome": user['nomeCadastro'], "email": user['emailCadastro']}
         return jsonify({"mensagem": "Login efetuado com sucesso"})
@@ -427,6 +437,8 @@ def enviar_ajuda():
     
 @app.route("/admin/ajuda")
 def admin_ajuda():
+    if session.get("admin") not in ['denuncia', 'ajuda', 'metrica']:
+        return redirect(url_for('index'))
     con = conectar()
     cursor = con.cursor(dictionary=True)
     cursor.execute("""
@@ -566,14 +578,39 @@ def salvar_notificacoes():
 
     return jsonify({"mensagem": "Preferências salvas com sucesso!"})
 
+@app.route("/painel_metrica")
+def painel_metrica():
+    print("Sessão admin", session.get("admin")) 
+    if 'admin' in session and session.get('admin') == "metrica":
+        con = conectar()
+        cur = con.cursor()
+
+        cur.execute("SELECT COUNT(*) FROM usuarios")
+        total_usuarios = cur.fetchone()[0]
+
+        cur.execute("SELECT COUNT(*) FROM projetos")
+        total_projetos = cur.fetchone()[0]
+
+        cur.execute("SELECT COUNT(*) FROM denuncia")
+        total_denuncia = cur.fetchone()[0]
+
+        cur.close()
+        con.close()
+        return render_template("painel_metrica.html", total_usuarios=total_usuarios, total_projetos=total_projetos, total_denuncia=total_denuncia)
+    return redirect(url_for('login'))
+
 @app.route("/painel_admin", methods=["GET", "POST"])
 def painel_admin():
+    if session.get('admin') not in ['denuncia', 'ajuda']:
+        return redirect(url_for('index')) 
+    
     if request.method == "GET":
         con = conectar()
         cur = con.cursor(dictionary=True)
 
         cur.execute("""
             SELECT 
+                projetos.id,
                 projetos.nomeProjeto, 
                 projetos.descricaoProjeto, 
                 projetos.link, 
@@ -592,6 +629,23 @@ def painel_admin():
         con.close()
 
         return render_template("painel_admin.html", projetos=projetos_denunciados)
+
+@app.route("/excluir/<int:projeto_id>", methods=["POST"])
+def excluir(projeto_id):
+    try:
+        con = conectar()
+        cur = con.cursor()
+        cur.execute("DELETE FROM denuncia WHERE projeto_id = %s", (projeto_id,))
+
+        cur.execute("DELETE FROM projetos WHERE id = %s", (projeto_id,))
+        con.commit()
+        con.close()
+
+        return jsonify({"mensagem": "Projeto excluído com sucesso"}), 200
+    
+    except Exception as e:
+        print("Erro ao excluir projeto", e)
+        return jsonify({"mensagem": f"Erro ao excluir projeto : {str(e)}"}), 500
 
 
 if __name__ == "__main__":

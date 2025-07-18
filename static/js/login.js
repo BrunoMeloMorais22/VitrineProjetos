@@ -30,6 +30,10 @@ function fazerLogin(event){
                     window.location.href = "/painel_admin"
                 }
 
+                else if(data.admin === "metrica"){
+                    window.location.href = "/painel_metrica"
+                }
+
                 else{
                     window.location.href = "/"
                 }

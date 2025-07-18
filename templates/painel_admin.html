@@ -14,26 +14,29 @@
   <div class="card">
     <img src="{{ url_for('static', filename='uploads/' + p.imagem) }}" alt="Imagem do projeto" width="200">
     <h3>{{ p.nomeProjeto }}</h3>
-    <i onclick="denuncia('{{ p.id }}')" class="fa-solid fa-triangle-exclamation"></i>
+
     <p><strong>Descrição:</strong> {{ p.descricaoProjeto }}</p>
     <p><strong>Linguagens:</strong> {{ p.linguagens }}</p>
     <p><strong>Link:</strong> <a href="{{ p.link }}" target="_blank">{{ p.link }}</a></p>
     <p><strong>Data:</strong> {{ p.data_criacao }}</p>
     <p><strong>Motivo da denúncia:</strong> {{ p.motivo }}</p>
     <p><strong>Email do denunciante:</strong> {{ p.email_usuario }}</p>
-    <hr>
+    <i onclick="denuncia('{{ p.id }}')" class="fa-solid fa-triangle-exclamation"></i>
   </div>
 {% endfor %}
 
 
     <div id="modelExcluir" class="modal-overlay">
-        <div class="modal">
-        <h2>Denunciar Projeto</h2>
-        <textarea name="" id="motivoExcluir" placeholder="Tem certeza que deseja excluir o projeto?"></textarea>
+      <div class="modal">
+        <h2>Excluir Projeto</h2>
+        <textarea id="motivoExcluir" placeholder="Tem certeza que deseja excluir o projeto?"></textarea>
         <p>Tem certeza que deseja excluir este projeto?</p>
         <button onclick="confirmarDenuncia()">Sim</button>
         <button onclick="fecharModal()">Cancelar</button>
     </div>
+</div>
+
+    <script src="/static/js/painel_admin.js"></script>
 </div>
 </body>
 </html>

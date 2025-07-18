@@ -308,5 +308,8 @@ i{
   }
 }
 
+.modal-overlay.show {
+  display: flex !important;
+}
 
 
