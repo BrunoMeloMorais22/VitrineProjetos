@@ -432,8 +432,9 @@ def enviar_ajuda():
     
 @app.route("/admin/ajuda")
 def admin_ajuda():
-    if 'admin' not in session and session.get('admin') != "ajuda":
+    if session.get('admin') != "ajuda":
         return redirect(url_for('login'))
+
     con = conectar()
     cursor = con.cursor(dictionary=True)
     cursor.execute("""
