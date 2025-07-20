@@ -38,7 +38,7 @@ CORS(app, supports_credentials=True)
 
 def conectar():
     return mysql.connector.connect(
-        host=os.getenv("MYSQL_HOST", "localhost"),
+        host=os.getenv("MYSQL_HOST", "127.0.0.1"),
         user=os.getenv("MYSQL_USER", "root"),
         password=os.getenv("MYSQL_PASSWORD", "passport"),
         database=os.getenv("MYSQL_DATABASE", "vitrine"),
