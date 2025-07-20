@@ -36,13 +36,18 @@ app.permanent_session_lifetime = timedelta(minutes=30)
 
 CORS(app, supports_credentials=True)
 
-def get_projetos_com_dono():
-    conexao = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="passport",
-        database="vitrine"
+def conectar():
+    return mysql.connector.connect(
+        host=os.getenv("MYSQL_HOST", "localhost"),
+        user=os.getenv("MYSQL_USER", "root"),
+        password=os.getenv("MYSQL_PASSWORD", "passport"),
+        database=os.getenv("MYSQL_DATABASE", "vitrine"),
+        port=int(os.getenv("MYSQL_PORT", 3306))
     )
+
+def get_projetos_com_dono():
+    conexao = conectar()
+
     cursor = conexao.cursor(dictionary=True)
     query = """
     SELECT
@@ -71,15 +76,6 @@ def get_projetos_agrupados_por_dono():
         agrupado[projeto["nomeDono"]].append(projeto)
 
     return agrupado
-
-def conectar():
-    return mysql.connector.connect(
-        host = "localhost",
-        user = "root",
-        password = "passport",
-        database = "vitrine"
-    )
-
 @app.route("/")
 def index():
     projetos_agrupados = get_projetos_agrupados_por_dono()
@@ -649,5 +645,7 @@ def excluir(projeto_id):
 
 
 if __name__ == "__main__":
-    with app.app_context():
-        app.run(debug=True, port=8000)
+    import os
+    port = int(os.environ.get("PORT", 8000))
+    app.run(debug=True, host="0.0.0.0", port=port)
+
