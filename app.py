@@ -432,8 +432,8 @@ def enviar_ajuda():
     
 @app.route("/admin/ajuda")
 def admin_ajuda():
-    if session.get("admin") not in ['denuncia', 'ajuda', 'metrica']:
-        return redirect(url_for('index'))
+    if 'admin' not in session and session.get('admin') != "ajuda":
+        return redirect(url_for('login'))
     con = conectar()
     cursor = con.cursor(dictionary=True)
     cursor.execute("""
@@ -454,20 +454,53 @@ def responder_ajuda(id_mensagem):
 
     try:
         con = conectar()
-        cursor = con.cursor()
+        cursor = con.cursor(dictionary=True)
 
-        sql = "UPDATE mensagem_ajuda SET resposta_admin = %s WHERE id = %s"
-        cursor.execute(sql, (resposta_admin, id_mensagem))
+        cursor.execute("""
+            SELECT ma.mensagem, u.emailCadastro
+            FROM mensagem_ajuda ma
+            JOIN usuarios u ON ma.id_usuario = u.id
+            WHERE ma.id = %s
+        """, (id_mensagem,))
+        info = cursor.fetchone()
+
+        if not info:
+            return jsonify({"mensagem": "Mensagem não encontrada"}), 404
+
+        cursor.execute("UPDATE mensagem_ajuda SET resposta_admin = %s WHERE id = %s", (resposta_admin, id_mensagem))
         con.commit()
 
         cursor.close()
         con.close()
 
+        msg = EmailMessage()
+        msg['Subject'] = "📩 Resposta da sua dúvida"
+        msg['From'] = "grumelo098@gmail.com"
+        msg['To'] = info['emailCadastro']
+        msg.add_alternative(f"""
+        <!DOCTYPE html>
+        <html>
+          <body>
+            <h2>👋 Olá!</h2>
+            <p>Recebemos sua dúvida:</p>
+            <blockquote>{info['mensagem']}</blockquote>
+            <p>E aqui está nossa resposta:</p>
+            <blockquote>{resposta_admin}</blockquote>
+            <hr>
+            <p>Se precisar de mais ajuda, estamos por aqui! 😊</p>
+          </body>
+        </html>
+        """, subtype='html')
+
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+            smtp.login("grumelo098@gmail.com", "ourf sgnz wkiw sxse")
+            smtp.send_message(msg)
+
         return redirect(url_for("admin_ajuda"))
     except Exception as e:
         print("Erro ao responder", e)
-        return jsonify({"mensagem": "Erro ao responder"})
-    
+        return jsonify({"mensagem": "Erro ao responder"}), 500
+
 @app.route("/projeto_curtido/<int:dono_id>", methods=["POST"])
 def projeto_curtido(dono_id):
     if 'usuario' not in session:
@@ -574,8 +607,7 @@ def salvar_notificacoes():
     return jsonify({"mensagem": "Preferências salvas com sucesso!"})
 
 @app.route("/painel_metrica")
-def painel_metrica():
-    print("Sessão admin", session.get("admin")) 
+def painel_metrica(): 
     if 'admin' in session and session.get('admin') == "metrica":
         con = conectar()
         cur = con.cursor()
@@ -596,10 +628,7 @@ def painel_metrica():
 
 @app.route("/painel_admin", methods=["GET", "POST"])
 def painel_admin():
-    if session.get('admin') not in ['denuncia', 'ajuda']:
-        return redirect(url_for('index')) 
-    
-    if request.method == "GET":
+    if 'admin' in session and session.get('admin') == "denuncia":
         con = conectar()
         cur = con.cursor(dictionary=True)
 
@@ -624,6 +653,7 @@ def painel_admin():
         con.close()
 
         return render_template("painel_admin.html", projetos=projetos_denunciados)
+    return redirect(url_for('login')) 
 
 @app.route("/excluir/<int:projeto_id>", methods=["POST"])
 def excluir(projeto_id):
@@ -641,7 +671,6 @@ def excluir(projeto_id):
     except Exception as e:
         print("Erro ao excluir projeto", e)
         return jsonify({"mensagem": f"Erro ao excluir projeto : {str(e)}"}), 500
-
 
 if __name__ == "__main__":
     import os
