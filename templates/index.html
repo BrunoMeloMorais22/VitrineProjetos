@@ -14,6 +14,8 @@
             {% if 'usuario' in session %}
               <a href="{{ url_for('perfil') }}"><i class="fa-solid fa-user"></i></a>
             {% else %}
+              <a href="{{ url_for('sobre_site') }}">Sobre o site</a>
+              <a href="{{ url_for('sobre_autor') }}">Sobre o autor</a>
               <a href="{{ url_for('login') }}">Entrar</a>
               <a href="{{ url_for('cadastro') }}">Cadastrar-se</a>
             {% endif %}
@@ -53,7 +55,7 @@
         <img src="/static/image/networking.png" alt="Projeto 1">
         <div class="conteudo">
           <h4>Site Networking</h4>
-          <p>Site feito com HTMl, CSS, JavaScript, Flask, com conexão com backend. Conecte-se com novas pessoas, compartilher experiências e participe de eventos</p>
+          <p>Site feito com HTMl, CSS, JavaScript, Flask, com conexão com backend. Conecte-se com novas pessoas, compartilhe experiências e participe de eventos</p>
           <p><strong>Linguagens:</strong>JavaScript, Python(flask), Mysql</p> <br>
           <a href="https://networking-pi.vercel.app">Ver projeto</a>
 

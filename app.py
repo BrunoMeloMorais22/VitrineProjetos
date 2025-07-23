@@ -251,7 +251,7 @@ def cadastrar_projeto():
     quantidade = cur.fetchone()['total']
 
     if quantidade >= 3:
-        return jsonify({"mensagem": "Limite de 3 projetos atingido"}), 400
+        return jsonify({"mensagem": "Limite de 3 projetos atingido. Atualize seu plano para cadastrar mais"}), 400
     
     cur.execute("""
         INSERT INTO projetos (nomeProjeto, descricaoProjeto, link, linguagens, imagem, dono_id)
@@ -672,6 +672,14 @@ def excluir(projeto_id):
     except Exception as e:
         print("Erro ao excluir projeto", e)
         return jsonify({"mensagem": f"Erro ao excluir projeto : {str(e)}"}), 500
+
+@app.route("/sobre_site", methods=["POST", "GET"])
+def sobre_site():
+    return render_template("sobre_site.html")
+
+@app.route("/sobre_autor", methods=["GET", "POST"])
+def sobre_autor():
+    return render_template("sobre_autor.html")
 
 if __name__ == "__main__":
     import os
