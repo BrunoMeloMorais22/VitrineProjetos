@@ -13,6 +13,7 @@
         <nav>
             {% if 'usuario' in session %}
               <a href="{{ url_for('perfil') }}"><i class="fa-solid fa-user"></i></a>
+              <a href="{{ url_for('plano') }}"><i class="fa-solid fa-earth-americas"></i></a>
             {% else %}
               <a href="{{ url_for('sobre_site') }}">Sobre o site</a>
               <a href="{{ url_for('sobre_autor') }}">Sobre o autor</a>

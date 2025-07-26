@@ -681,6 +681,25 @@ def sobre_site():
 def sobre_autor():
     return render_template("sobre_autor.html")
 
+@app.route("/plano", methods=["GET", "POST"])
+def plano():
+    return render_template("planos.html")
+
+@app.route("/selecionar-plano", methods=["POST"])
+def selecionar_plano():
+    dados = request.get_json()
+
+    plano = dados.get("plano")
+
+    con = conectar()
+    cur = con.cursor()
+    cur.execute("UPDATE usuarios SET planos = %s WHERE id = %s", (plano, session['usuario']['id']))
+
+    con.commit()
+    con.close()
+
+    return jsonify({"mensagem": "Plano selecionado", "sucesso": True})
+
 if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 8000))

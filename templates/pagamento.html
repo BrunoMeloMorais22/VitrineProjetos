@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/pagamento.css">
+    <title>Tela de Pagamento</title>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>Tela de pagamento</h1>
+        </header>
+
+        <div>
+            <button id="creditoBtn">Crédito</button>
+            <button id="debitoBtn">Débito</button>
+            <button id="pixBtn">Pix</button>
+        </div>
+
+        <div id="credito" class="metodo" style="display:none;">
+            <p>Você escolheu cartão de crédito.</p>
+
+        </div>
+
+        <div id="debito" class="metodo" style="display:none;">
+            <p>Você escolheu cartão de débito.</p>
+        </div>
+
+        <div id="pix" class="metodo" style="display:none;">
+            <p>Você escolheu Pix.</p>
+            <img src="/static/imagens/qrcode.png" alt="QR Code Pix" width="200">
+        </div>
+    </main>
+
+    <script src="/static/js/pagamento.js"></script>
+</body>
+</html>
