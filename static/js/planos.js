@@ -1,15 +1,15 @@
 
 
-function selecionarPlano(plano){
+function selecionarPlano(plano, valor){
     fetch('/selecionar-plano', {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ plano: plano})
+        body: JSON.stringify({ plano: plano, valor:valor})
     })
     .then(res => res.json())
     .then(data => {
         if(data.sucesso){
-            alert("Plano selecionado com sucesso")
+            window.location.href = "/pagamento"
         }
 
         else{

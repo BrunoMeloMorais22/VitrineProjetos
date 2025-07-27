@@ -685,11 +685,27 @@ def sobre_autor():
 def plano():
     return render_template("planos.html")
 
+
 @app.route("/selecionar-plano", methods=["POST"])
 def selecionar_plano():
     dados = request.get_json()
 
     plano = dados.get("plano")
+    valor = dados.get("valor")
+
+    valores_validos = {
+        "Noob": 0.00,
+        "Amador": 39.90,
+        "Veterano": 69.90
+    }
+
+    valor_correto = valores_validos.get(plano)
+
+    if valor_correto is None or valor != valor_correto:
+        return jsonify({"mensagem": "Dados inválidos", "sucesso": False}), 400
+
+    session['plano'] = plano
+    session['valor'] = valor
 
     con = conectar()
     cur = con.cursor()
@@ -699,6 +715,12 @@ def selecionar_plano():
     con.close()
 
     return jsonify({"mensagem": "Plano selecionado", "sucesso": True})
+
+@app.route("/pagamento", methods=["GET", "POST"])
+def pagamento():
+    plano = session.get("plano")
+    valor = session.get("valor")
+    return render_template("pagamento.html", plano=plano, valor=valor)
 
 if __name__ == "__main__":
     import os

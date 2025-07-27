@@ -1,54 +1,106 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-*{
-    font-family: 'Montserrat', sans-serif;
+body {
     margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
 }
 
-div > button {
-    margin: 10px 5px;
-    padding: 10px 20px;
+main {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+}
+
+header h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #0033A0;
+}
+
+button {
+    padding: 12px 20px;
+    margin: 5px;
+    background-color: #0033A0;
+    color: white;
     border: none;
-    background-color: #FFD700;
-    color: #000;
-    font-weight: bold;
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-div > button:hover {
-    background-color: #e6c200;
+button:hover {
+    background-color: #00257A;
 }
 
 .metodo {
-    background-color: #fff;
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
+    margin-top: 30px;
 }
 
-.metodo p {
-    font-size: 1.1rem;
-    margin-bottom: 15px;
+form {
+    display: flex;
+    flex-direction: column;
 }
 
-.metodo img {
+form h1 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #0033A0;
+}
+
+label {
     margin-top: 10px;
-    max-width: 100%;
-    height: auto;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-top: 5px;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #0033A0;
+    outline: none;
+}
+
+form button[type="submit"] {
+    margin-top: 20px;
+    background-color: #FFD700;
+    color: #000;
+    font-weight: bold;
+}
+
+form button[type="submit"]:hover {
+    background-color: #e5c100;
+}
+
+#pix img {
+    display: block;
+    margin: 20px auto;
+    border: 2px solid #ccc;
     border-radius: 8px;
 }
 
 @media (max-width: 600px) {
-    div > button {
+    main {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    button {
         width: 100%;
         margin-bottom: 10px;
     }
+}
+
+p{
+    font-weight: bold;
+    background: yellow;
+    padding: 3px;
 }
