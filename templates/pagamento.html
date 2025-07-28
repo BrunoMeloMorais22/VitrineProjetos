@@ -8,86 +8,104 @@
 </head>
 <body>
     <main>
-        <header>
-            <h1>Tela de pagamento</h1>
-        </header>
+    <header>
+      <h1>Tela de pagamento</h1>
+    </header>
 
-        <div>
-            <button id="creditoBtn">Crédito</button>
-            <button id="debitoBtn">Débito</button>
-            <button id="pixBtn">Pix</button>
+    <div style="margin-top: 20px;">
+      <button id="creditoBtn">Crédito</button>
+      <button id="debitoBtn">Débito</button>
+      <button id="pixBtn">Pix</button>
+    </div>
+
+    <div id="credito" class="metodo" style="display:none; margin-top: 20px;">
+      <form class="cartaoForm">
+        <h1>Dados do cartão</h1>
+        <label>Nome no cartão:</label>
+        <input type="text" name="nome" required />
+
+        <label>Número do cartão:</label>
+        <input
+          type="text"
+          name="numero"
+          maxlength="19"
+          placeholder="0000 0000 0000 0000"
+          required
+        />
+
+        <label>Validade (MM/AA):</label>
+        <input type="text" name="validade" placeholder="MM/AA" maxlength="5" required />
+
+        <label>CVV:</label>
+        <input type="password" name="cvv" maxlength="4" required />
+
+        <label>CPF do titular:</label>
+        <input type="text" name="cpf" placeholder="000.000.000-00" />
+
+        <p>Plano escolhido: {{ plano }}<span id="planoEscolhidoCredito"></span></p>
+        <p>Valor a pagar: R$ {{ valor }}0<span id="valorPagarCredito"></span></p>
+
+        <button type="submit">Pagar</button>
+
+        <div class="cartoes-aceitos">
+          <img src="/static/image/logo-mastercard-4096.png" alt="Cartão Mastercard" />
+          <img src="/static/image/cartao-visa.jpeg" alt="Cartão Visa" />
+          <img src="/static/image/Cartão American Express.jpeg" alt="Cartão American Express" />
+          <img src="/static/image/cartao-elo.png" alt="Cartão Elo" />
         </div>
+      </form>
+    </div>
 
-        <div id="credito" class="metodo" style="display:none;">
-            <form id="cartaoForm">
-                <h1>Dados do cartão</h1>
-                <label>Nome no cartão:</label>
-                <input type="text" name="nome" required>
+    <div id="debito" class="metodo" style="display:none; margin-top: 20px;">
+      <form class="cartaoForm">
+        <h1>Dados do cartão</h1>
+        <label>Nome no cartão:</label>
+        <input type="text" name="nome" required />
 
-                <label>Número do cartão:</label>
-                <input type="text" name="numero" maxlength="19" placeholder="0000 0000 0000 0000" required>
+        <label>Número do cartão:</label>
+        <input
+          type="text"
+          name="numero"
+          maxlength="19"
+          placeholder="0000 0000 0000 0000"
+          required
+        />
 
-                <label>Validade (MM/AA):</label>
-                <input type="text" name="validade" placeholder="MM/AA" maxlength="5" required>
+        <label>Validade (MM/AA):</label>
+        <input type="text" name="validade" placeholder="MM/AA" maxlength="5" required />
 
-                <label>CVV:</label>
-                <input type="password" name="cvv" maxlength="4" required>
+        <label>CVV:</label>
+        <input type="password" name="cvv" maxlength="4" required />
 
-                <label>CPF do titular:</label>
-                <input type="text" name="cpf" placeholder="000.000.000-00">
+        <label>CPF do titular:</label>
+        <input type="text" name="cpf" placeholder="000.000.000-00" />
 
-                <p>Plano escolhido: {{ plano }}</p>
-                <p>Valor a pagar: R${{ valor }}0</p>
+        <p>Plano escolhido: {{ plano }}<span id="planoEscolhidoDebito"></span></p>
+        <p>Valor a pagar: R$ {{ valor }}0 <span id="valorPagarDebito"></span></p>
 
-                <button type="submit">Pagar</button>
+        <button type="submit">Pagar</button>
 
-                <div class="cartoes-aceitos">
-                    <img src="/static/image/logo-mastercard-4096.png" alt="Cartão Mastercard">
-                    <img src="/static/image/cartao-visa.jpeg" alt="Cartão Visa">
-                    <img src="/static/image/Cartão American Express.jpeg" alt="Cartão American Express">
-                    <img src="/static/image/cartao-elo.png" alt="Cartão Elo">
-                </div>
-            </form>
-
+        <div class="cartoes-aceitos">
+          <img src="/static/image/logo-mastercard-4096.png" alt="Cartão Mastercard" />
+          <img src="/static/image/cartao-visa.jpeg" alt="Cartão Visa" />
+          <img src="/static/image/Cartão American Express.jpeg" alt="Cartão American Express" />
+          <img src="/static/image/cartao-elo.png" alt="Cartão Elo" />
         </div>
+      </form>
+    </div>
 
-        <div id="debito" class="metodo" style="display:none;">
-            <form id="cartaoForm">
-                <h1>Dados do cartão</h1>
-                <label>Nome no cartão:</label>
-                <input type="text" name="nome" required>
+    <div id="pix" class="metodo" style="display:none; margin-top: 20px;">
+      <p>Você escolheu Pix.</p>
+      <p>Plano escolhido: {{ plano }}<span id="planoEscolhidoPix"></span></p>
+      <p>Valor a pagar: R$ <span id="valorPagarPix">{{ '%.2f' % valor }}</span></p>
 
-                <label>Número do cartão:</label>
-                <input type="text" name="numero" maxlength="19" placeholder="0000 0000 0000 0000" required>
 
-                <label>Validade (MM/AA):</label>
-                <input type="text" name="validade" placeholder="MM/AA" maxlength="5" required>
-
-                <label>CVV:</label>
-                <input type="password" name="cvv" maxlength="4" required>
-
-                <label>CPF do titular:</label>
-                <input type="text" name="cpf" placeholder="000.000.000-00">
-
-                <p>Plano escolhido: {{ plano }}</p>
-                <p>Valor a pagar: R${{ valor }}0</p>
-
-                <button type="submit">Pagar</button>
-
-                <div class="cartoes-aceitos">
-                    <img src="/static/image/logo-mastercard-4096.png" alt="Cartão Mastercard">
-                    <img src="/static/image/cartao-visa.jpeg" alt="Cartão Visa">
-                    <img src="/static/image/Cartão American Express.jpeg" alt="Cartão American Express">
-                    <img src="/static/image/cartao-elo.png" alt="Cartão Elo">
-                </div>
-            </form>
-        </div>
-
-        <div id="pix" class="metodo" style="display:none;">
-            <p>Você escolheu Pix.</p>
-            <img src="/static/imagens/qrcode.png" alt="QR Code Pix" width="200">
-        </div>
-    </main>
+      <div id="qrcodePix">
+        <h3>Escaneie o QR code</h3>
+        <img id="qrImagem" src="" alt="QR Code Pix" width="250" />
+      </div>
+    </div>
+  </main>
 
     <script src="/static/js/pagamento.js"></script>
 </body>

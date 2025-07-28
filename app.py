@@ -44,6 +44,12 @@ def conectar():
         database = "vitrine"
     )
 
+user = os.environ.get('MYSQL_USER')
+password = os.environ.get('MYSQL_PASSWORD')
+host = os.environ.get('MYSQL_HOST')
+database = os.environ.get('MYSQL_DATABASE')
+
+
 def get_projetos_com_dono():
     conexao = conectar()
 
