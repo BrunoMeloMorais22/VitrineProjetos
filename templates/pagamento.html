@@ -36,10 +36,17 @@
                 <label>CPF do titular:</label>
                 <input type="text" name="cpf" placeholder="000.000.000-00">
 
-                <p>Plano escolhido: R${{ plano }}</p>
+                <p>Plano escolhido: {{ plano }}</p>
                 <p>Valor a pagar: R${{ valor }}0</p>
 
                 <button type="submit">Pagar</button>
+
+                <div class="cartoes-aceitos">
+                    <img src="/static/image/logo-mastercard-4096.png" alt="Cartão Mastercard">
+                    <img src="/static/image/cartao-visa.jpeg" alt="Cartão Visa">
+                    <img src="/static/image/Cartão American Express.jpeg" alt="Cartão American Express">
+                    <img src="/static/image/cartao-elo.png" alt="Cartão Elo">
+                </div>
             </form>
 
         </div>
@@ -66,6 +73,13 @@
                 <p>Valor a pagar: R${{ valor }}0</p>
 
                 <button type="submit">Pagar</button>
+
+                <div class="cartoes-aceitos">
+                    <img src="/static/image/logo-mastercard-4096.png" alt="Cartão Mastercard">
+                    <img src="/static/image/cartao-visa.jpeg" alt="Cartão Visa">
+                    <img src="/static/image/Cartão American Express.jpeg" alt="Cartão American Express">
+                    <img src="/static/image/cartao-elo.png" alt="Cartão Elo">
+                </div>
             </form>
         </div>
 
