@@ -508,24 +508,32 @@ def responder_ajuda(id_mensagem):
         print("Erro ao responder", e)
         return jsonify({"mensagem": "Erro ao responder"}), 500
 
-@app.route("/projeto_curtido/<int:dono_id>", methods=["POST"])
-def projeto_curtido(dono_id):
+@app.route("/projeto_curtido/<int:projeto_id>", methods=["POST"])
+def projeto_curtido(projeto_id):
     if 'usuario' not in session:
         return jsonify({"mensagem": "Você precisa estar logado para curtir os projetos"})
 
     try:
+        usuario_id = session["usuario"]["id"]
         nomeCadastro = session["usuario"]["nome"]
         emailCadastro = session["usuario"]["email"]   
 
         con = conectar()
         cur = con.cursor(dictionary=True)
-        cur.execute("SELECT emailCadastro FROM usuarios WHERE id = %s", (dono_id,))
+
+        cur.execute("SELECT emailCadastro FROM usuarios WHERE id = %s", (projeto_id,))
         dono = cur.fetchone()
-        cur.close()
-        con.close()
+
 
         if not dono:
             return jsonify({"mensagem": "Dono do projeto não encontrado"}), 404
+        
+        sql = "INSERT INTO curtidas(usuario_id, projeto_id, data_curtida) VALUES (%s, %s, NOW())"
+        cur.execute(sql, (usuario_id, projeto_id))
+        con.commit()
+
+        cur.close()
+        con.close()
 
         email_dono = dono["emailCadastro"] 
 
@@ -727,6 +735,42 @@ def pagamento():
     plano = session.get("plano")
     valor = session.get("valor")
     return render_template("pagamento.html", plano=plano, valor=valor)
+
+@app.route("/projetos_curtidos", methods=["GET"])
+def projetos_curtidos():
+    print("Sessão atual", session)
+    usuario_id = session.get("usuario", {}).get("id")
+
+
+    if not usuario_id:
+        return redirect(url_for("login"))
+    try:
+        con = conectar()
+        cur = con.cursor(dictionary=True)
+
+        cur.execute("""
+            SELECT p.*, u.nomeCadastro AS nome_dono
+            FROM projetos p
+            JOIN curtidas c ON p.id = c.projeto_id
+            JOIN usuarios u ON p.dono_id = u.id
+            WHERE c.usuario_id = %s
+        """, (usuario_id,))
+        resultados = cur.fetchall()
+
+        con.close()
+
+        projetos_agrupados = {}
+        for projeto in resultados:
+            nome_dono = projeto['nome_dono']
+            if nome_dono not in projetos_agrupados:
+                projetos_agrupados[nome_dono] = []
+            projetos_agrupados[nome_dono].append(projeto)
+        return render_template("projetos_curtidos.html", projetos_agrupados=projetos_agrupados)
+    
+    except Exception as e:
+        print("Erro ao carregar projetos:", e)
+        return jsonify({"mensagem": "Erro ao carregar página"})
+
 
 if __name__ == "__main__":
     import os
