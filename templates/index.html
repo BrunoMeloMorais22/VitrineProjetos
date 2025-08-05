@@ -44,7 +44,7 @@
 
             <div>
                 <h4>3️⃣ Compartilhe com o mundo</h4>
-                <p>Outras pessoas poderão curtir</p>
+                <p>Outras pessoas poderão curtir e comentar</p>
             </div>
         </div>
     </section> 
@@ -96,9 +96,26 @@
             <h4>{{ projeto.nomeProjeto }}</h4>
             <p>{{ projeto.descricaoProjeto }}</p>
             <p><strong>Linguagens:</strong> {{ projeto.linguagens }}</p>
-            <a href="{{ projeto.link }}" target="_blank" class="botao">Ver Projeto</a>
-            <i onclick="denuncia('{{ projeto.id }}')" class="fa-solid fa-triangle-exclamation"></i>
-            <i class="fa-solid fa-heart" data-dono-id="{{ projeto.dono_id }}"></i>
+            <div class="acoes-projeto">
+  <a href="{{ projeto.link }}" target="_blank" class="botao">Ver Projeto</a>
+
+  <button class="toggle-comentarios" onclick="toggleComentarios()" title="Ver comentários">
+    <i class="fas fa-comments"></i>
+    <span id="contador-comentarios">0</span>
+  </button>
+
+  <i class="fa-solid fa-heart" data-dono-id="{{ projeto.dono_id }}"></i>
+  <i onclick="denuncia('{{ projeto.id }}')" class="fa-solid fa-triangle-exclamation"></i>
+</div>
+
+
+<div class="comentario-section" id="comentario-section">
+  <input type="text" id="username" placeholder="Seu nome">
+  <input type="text" id="msg" placeholder="Comentário...">
+  <button onclick="sendMessage()">Comentar</button>
+  <div id="chat"></div>
+</div>
+
           </div>
         </div>
       {% endfor %}
@@ -119,7 +136,7 @@
 </div>
 
 </section>
-
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
   <script src="/static/js/script.js"></script>
 </body>
 </html>

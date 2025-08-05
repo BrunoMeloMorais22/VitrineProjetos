@@ -1,9 +1,11 @@
 from flask import Flask, render_template, redirect, url_for, request, jsonify, session
 from datetime import timedelta
 import smtplib
+from flask_socketio import SocketIO, send
 import requests
 import mysql.connector
 from email.message import EmailMessage
+import socketio
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
 from collections import defaultdict
@@ -14,6 +16,7 @@ app = Flask(__name__)
 
 app.secret_key = "corinthians"
 serializer = URLSafeTimedSerializer(app.secret_key)
+socketio = SocketIO(app)
 
 tipo = 'admin_metrica'
 
@@ -770,10 +773,14 @@ def projetos_curtidos():
     except Exception as e:
         print("Erro ao carregar projetos:", e)
         return jsonify({"mensagem": "Erro ao carregar página"})
+    
+@socketio.on("message")
+def handle_message(data):
+    send(data, broadcast=True)
 
 
 if __name__ == "__main__":
     import os
-    port = int(os.environ.get("PORT", 8000))
+    port = int(os.environ.get("PORT", 5000))
     app.run(debug=True, host="0.0.0.0", port=port)
 
