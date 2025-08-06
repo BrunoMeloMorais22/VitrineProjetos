@@ -87,7 +87,6 @@ def get_projetos_agrupados_por_dono():
 @app.route("/")
 def index():
     projetos_agrupados = get_projetos_agrupados_por_dono()
-
     return render_template("index.html", projetos_agrupados=projetos_agrupados)
 
 @app.route("/cadastro", methods=["GET", "POST"])

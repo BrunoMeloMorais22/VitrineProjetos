@@ -63,6 +63,7 @@ document.querySelectorAll(".fa-heart").forEach(coracao => {
 
 var socket = io.connect("http://127.0.0.1:5000");
 
+
 let contador = 0
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -90,7 +91,7 @@ socket.on("message", function(data){
 div.innerHTML = `
   
   <div class="mensagem">
-    <strong> <i class="fa-solid fa-user"></i> ${data.username}</strong>
+    <strong> <i class="fa-solid fa-user"></i> ${username}</strong>
     <div class="texto-msg">${data.message}</div>
     <button onclick="editar(this)" class="editar-btn">Editar</button>
     <div style="font-size: 12px; color: gray; margin-top: 4px;">${data_formatada} às ${hora_formatada}</div>
@@ -137,6 +138,3 @@ function sendMessage() {
             botao.remove()
         }
     }
-
-
-    
