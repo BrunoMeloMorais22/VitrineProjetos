@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request, jsonify, session
 from datetime import timedelta
 import smtplib
+from werkzeug.utils import secure_filename
 from flask_socketio import SocketIO, send
 import requests
 import mysql.connector
@@ -84,6 +85,36 @@ def get_projetos_agrupados_por_dono():
         agrupado[projeto["nomeDono"]].append(projeto)
 
     return agrupado
+
+permissoes = {
+    "Noob": {
+        "limite_projetos": 3,
+        "chat": False,
+        "favoritar": False,
+        "estatisticas": False,
+        "atendimento_prioritario": False,
+        "selo_verificacao": False,
+        "convites_eventos": False
+    },
+    "Amador": {
+        "limite_projetos": 4,  
+        "chat": True,
+        "favoritar": True,
+        "estatisticas": False,
+        "atendimento_prioritario": False,
+        "selo_verificado": False,
+        "convites_eventos": False
+    },
+    "Veterano": {
+        "limite_projetos": 6, 
+        "chat": True,
+        "favoritar": True,
+        "estatisticas": True,
+        "atendimento_prioritario": True,
+        "selo_verificado": True,
+        "convites_eventos": True
+    }
+}
 @app.route("/")
 def index():
     projetos_agrupados = get_projetos_agrupados_por_dono()
@@ -246,11 +277,15 @@ def cadastrar_projeto():
     if not nomeProjeto or not descricaoProjeto or not linguagens:
         return jsonify({"mensagem": "Preencha todos os campos"}), 400
 
-    nome_imagem = imagem.filename
+    nome_imagem = secure_filename(imagem.filename)
     caminho = os.path.join("static/uploads", nome_imagem)
     imagem.save(caminho)
 
+    plano = session.get("plano")
     dono_id = session['usuario']['id']
+
+    limite = permissoes.get(plano, {}).get("limite_projetos", 0)
+
     con = conectar()
     cur = con.cursor(dictionary=True)
 
@@ -258,9 +293,9 @@ def cadastrar_projeto():
     cur.execute("SELECT COUNT(*) AS total FROM projetos WHERE dono_id = %s", (dono_id,))
     quantidade = cur.fetchone()['total']
 
-    if quantidade >= 3:
-        return jsonify({"mensagem": "Limite de 3 projetos atingido. Atualize seu plano para cadastrar mais"}), 400
-    
+    if quantidade >= limite:
+        return jsonify({"mensagem": f"Limite de {limite} projetos atingidos. Atualize o seu plano para cadastrar mais"}), 400
+
     cur.execute("""
         INSERT INTO projetos (nomeProjeto, descricaoProjeto, link, linguagens, imagem, dono_id)
         VALUES (%s, %s, %s, %s, %s, %s)
@@ -738,6 +773,33 @@ def pagamento():
     valor = session.get("valor")
     return render_template("pagamento.html", plano=plano, valor=valor)
 
+@app.route("/atualizar_beneficios", methods=["POST"])
+def atualizar_beneficios():
+    if 'usuario' not in session:
+        return jsonify({"message": "Usuário não autenticado"}), 401
+    
+    plano = session.get("plano")
+    if not plano:
+        return jsonify({"message": "Plano não selecionado"}), 400
+    
+    try:
+        con = conectar()
+        cur = con.cursor()
+        if plano == "Noob":
+            cur.execute("UPDATE usuarios SET beneficios = 'Nenhum' WHERE id = %s", (session['usuario']['id'],))
+        elif plano == "Amador":
+            cur.execute("UPDATE usuarios SET beneficios = '3 projetos' WHERE id = %s", (session['usuario']['id'],))
+        elif plano == "Veterano":
+            cur.execute("UPDATE usuarios SET beneficios = '5 projetos' WHERE id = %s", (session['usuario']['id'],))
+        else:
+            return jsonify({"message": "Plano inválido"}), 400
+        con.commit()
+        cur.close()
+        con.close()
+        return jsonify({"message": "Benefícios atualizados com sucesso"}), 200
+    except Exception as e:
+        print("Erro ao atualizar benefícios:", e)
+        return jsonify({"message": "Erro ao atualizar benefícios"}), 500
 @app.route("/projetos_curtidos", methods=["GET"])
 def projetos_curtidos():
     print("Sessão atual", session)
@@ -772,10 +834,13 @@ def projetos_curtidos():
     except Exception as e:
         print("Erro ao carregar projetos:", e)
         return jsonify({"mensagem": "Erro ao carregar página"})
+ 
     
 @socketio.on("message")
 def handle_message(data):
     send(data, broadcast=True)
+
+
 
 
 if __name__ == "__main__":
