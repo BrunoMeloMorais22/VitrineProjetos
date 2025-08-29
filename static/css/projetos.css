@@ -109,6 +109,10 @@ body {
   cursor: pointer;
 }
 
+#imagem{
+  background: rgba(255, 255, 255, 0.658);
+}
+
 .social {
   text-align: center;
   margin-top: 30px;

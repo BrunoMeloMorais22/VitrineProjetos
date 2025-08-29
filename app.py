@@ -834,15 +834,15 @@ def projetos_curtidos():
     except Exception as e:
         print("Erro ao carregar projetos:", e)
         return jsonify({"mensagem": "Erro ao carregar página"})
- 
     
 @socketio.on("message")
 def handle_message(data):
     send(data, broadcast=True)
 
-
-
-
+@app.route("/conversas", methods=["POST", "GET"])
+def conversas():
+    return render_template("conversas.html")
+    
 if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 5000))
