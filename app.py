@@ -12,12 +12,14 @@ from flask_cors import CORS
 from collections import defaultdict
 import os
 from itsdangerous import Serializer, URLSafeTimedSerializer
+import psycopg2
 
 app = Flask(__name__)
 
 app.secret_key = "corinthians"
 serializer = URLSafeTimedSerializer(app.secret_key)
 socketio = SocketIO(app)
+conn = psycopg2.connect(os.environ.get("postgresql://meu_banco_fwqg_user:dLArWtyIWZdrqgqxyQZohYK3URRYTX5I@dpg-d49qrsjipnbc73982s1g-a.oregon-postgres.render.com/meu_banco_fwqg"))
 
 tipo = 'admin_metrica'
 
